@@ -13,7 +13,6 @@ header.header {
       display: flex;
       align-items: center;
       border-bottom: 1px solid #C5C5C5;
-      font-family: 'Montserrat', sans-serif;
       font-weight: 500;
 
       .header__top-menu {
@@ -31,12 +30,12 @@ header.header {
             border-bottom: 1px solid transparent;
 
             &.active {
-              border-bottom-color: $base-text-color;
+              border-bottom-color: $color-primary;
             }
 
             a {
               font-size: 16px;
-              color: $base-text-color;
+              color: $color-primary;
               cursor: pointer;
               text-decoration: none;
             }
@@ -46,7 +45,7 @@ header.header {
 
       .header__top-phone {
         font-size: 16px;
-        color: $base-text-color;
+        color: $color-primary;
         margin-right: 59px;
         text-decoration: none;
       }
@@ -68,7 +67,7 @@ header.header {
             position: absolute;
             font-weight: 400;
             font-size: 9px;
-            color: $base-text-color;
+            color: $color-primary;
             background-color: #B6D5B9;
             border-radius: 50%;
             width: 18px;
@@ -103,12 +102,12 @@ header.header {
             border-bottom: 1px solid transparent;
 
             &.active {
-              border-bottom-color: $base-text-color;
+              border-bottom-color: $color-primary;
             }
 
             a {
               font-size: 16px;
-              color: $base-text-color;
+              color: $color-primary;
               text-decoration: none;
               cursor: pointer;
             }
@@ -120,11 +119,11 @@ header.header {
         position: relative;
 
         input {
-          border: 1px solid $base-text-color;
+          border: 1px solid $color-primary;
           border-radius: 30px;
           padding: 10px 10px 10px 43px;
           font-size: 16px;
-          color: $base-text-color;
+          color: $color-primary;
           width: 214px;
           height: 41px;
           box-sizing: border-box;

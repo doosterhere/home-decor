@@ -1,0 +1,109 @@
+@import "../../../../assets/styles/variables";
+
+footer.footer {
+  padding-top: 39px;
+  padding-bottom: 50px;
+  background-color: #648F64;
+
+  .container {
+    display: flex;
+
+    a.logo {
+      margin-right: 63px;
+    }
+
+    .footer-block {
+      margin-top: 11px;
+
+      .footer-block__name {
+        font-weight: 500;
+        font-size: 16px;
+        color: $color-text-footer;
+        margin-bottom: 25px;
+        text-transform: uppercase;
+      }
+
+      .footer-block__items {
+
+        ul {
+          list-style: none;
+          padding-left: 0;
+
+          li {
+            margin-bottom: 11px;
+
+            &:last-child {
+              margin-bottom: 0;
+            }
+
+            a {
+              font-size: 16px;
+              color: $color-text-footer;
+              text-decoration: none;
+              cursor: pointer;
+            }
+          }
+        }
+      }
+
+      &.menu__footer-block {
+        margin-right: 57px;
+      }
+
+      &.category__footer-block {
+        margin-right: 34px;
+      }
+
+      &.info__footer-block {
+        margin-right: 63px;
+
+        .footer-block__name {
+          margin-bottom: 15px;
+        }
+
+        .footer-block__social {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          margin-bottom: 55px;
+        }
+
+        .footer-block__payment {
+          display: grid;
+          grid-template-columns: repeat(3, 70px);
+          grid-template-rows: 1fr 1fr;
+          grid-gap: 10px;
+          justify-content: center;
+
+          .payment-item {
+            height: 35px;
+            background-position: top;
+          }
+        }
+      }
+
+      &.contacts__footer-block {
+        max-width: 253px;
+
+        .footer-block__contact {
+          margin-bottom: 15px;
+          font-size: 16px;
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+
+          .footer-block__contact-head {
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: $color-text-footer;
+          }
+
+          .footer-block__contact-info {
+            color: $color-text-footer;
+          }
+        }
+      }
+    }
+  }
+}

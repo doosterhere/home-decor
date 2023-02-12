@@ -1,0 +1,43 @@
+<section class="signup" [formGroup]="signupForm" passwordRepeat>
+  <div class="container">
+    <div class="auth-form">
+      <div class="auth-form__title">Регистрация на сайте</div>
+      <div class="auth-form__inputs">
+        <div class="auth-form__input">
+          <input type="text" class="input" placeholder="Электронная почта"
+                 [ngStyle]="{'border-color': signupForm.get('email')?.invalid &&
+                 (signupForm.get('email')?.dirty || signupForm.get('email')?.touched) ? '#DE1818' : ''}"
+                 formControlName="email">
+        </div>
+        <div class="auth-form__input">
+          <input type="password" class="input" placeholder="Пароль"
+                 [ngStyle]="{'border-color': signupForm.get('password')?.invalid &&
+                 (signupForm.get('password')?.dirty || signupForm.get('password')?.touched) ? '#DE1818' : ''}"
+                 formControlName="password">
+        </div>
+        <div class="auth-form__input">
+          <input type="password" class="input" placeholder="Повторите пароль"
+                 [ngStyle]="{'border-color': signupForm.get('passwordRepeat')?.invalid &&
+                 (signupForm.get('passwordRepeat')?.dirty || signupForm.get('passwordRepeat')?.touched) ? '#DE1818' : ''}"
+                 formControlName="passwordRepeat">
+        </div>
+        <div class="auth-form__checkbox">
+          <input type="checkbox" id="agree" formControlName="agree">
+          <label for="agree">
+            Я принимаю <a href="#">условия пользовательского соглашения </a>
+            и даю <a href="#">согласие на обработку персональных данных</a>.
+          </label>
+        </div>
+      </div>
+      <div class="auth-form__button">
+        <button class="button" [disabled]="signupForm.invalid" (click)="signup()">Зарегистрироваться</button>
+      </div>
+      <div class="auth-form__link">
+        Уже есть аккаунт?<a routerLink="/login">Войдите</a>
+      </div>
+    </div>
+    <div class="page-image">
+      <img src="./assets/images/page/signup-bckgrnd.png" alt="flower">
+    </div>
+  </div>
+</section>

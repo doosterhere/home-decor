@@ -1,0 +1,35 @@
+<section class="login" [formGroup]="loginForm">
+  <div class="container">
+    <div class="auth-form">
+      <div class="auth-form__title">Войти в личный кабинет</div>
+      <div class="auth-form__inputs">
+        <div class="auth-form__input">
+          <input type="text" class="input" placeholder="Электронная почта"
+                 [ngStyle]="{'border-color': loginForm.get('email')?.invalid &&
+                 (loginForm.get('email')?.dirty || loginForm.get('email')?.touched) ? '#DE1818' : ''}"
+                 formControlName="email">
+        </div>
+        <div class="auth-form__input">
+          <input type="password" class="input" placeholder="Пароль"
+                 [ngStyle]="{'border-color': loginForm.get('password')?.invalid &&
+                 (loginForm.get('password')?.dirty || loginForm.get('password')?.touched) ? '#DE1818' : ''}"
+                 formControlName="password">
+        </div>
+        <div class="auth-form__checkbox">
+          <input type="checkbox" id="remember"
+                 formControlName="rememberMe">
+          <label for="remember">Запомнить меня</label>
+        </div>
+      </div>
+      <div class="auth-form__button">
+        <button class="button" [disabled]="loginForm.invalid" (click)="login()">Войти</button>
+      </div>
+      <div class="auth-form__link">
+        Нет аккаунта?<a routerLink="/signup">Зарегистрируйтесь</a>
+      </div>
+    </div>
+    <div class="page-image">
+      <img src="./assets/images/page/login-bckgrnd.png" alt="flower">
+    </div>
+  </div>
+</section>

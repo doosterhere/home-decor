@@ -25,6 +25,20 @@ html, body {
   }
 }
 
+.small-input {
+  border: 1px solid $color-secondary-02;
+  border-radius: 5px;
+  text-align: center;
+  padding: 2px;
+  box-sizing: border-box;
+  width: 40px;
+  height: 28px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  color: $color-primary;
+}
+
 .button {
   text-align: center;
   padding-top: 15px;
@@ -43,6 +57,11 @@ html, body {
     background-color: $color-button-disabled;
     cursor: not-allowed;
   }
+}
+
+a.button {
+  text-decoration: none;
+  display: inline-block;
 }
 
 .mat-mdc-menu-item {

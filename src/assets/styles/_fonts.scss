@@ -11,6 +11,19 @@
 }
 
 @font-face {
+  src: url("../fonts/Montserrat-SemiBold.ttf");
+  font-family: "Montserrat";
+  font-weight: 600;
+}
+
+@font-face {
+  src: url("../fonts/Montserrat-LightItalic.ttf");
+  font-family: "Montserrat";
+  font-style: italic;
+  font-weight: 300;
+}
+
+@font-face {
   src: url("../fonts/Lora-Regular.woff");
   font-family: 'Lora';
   font-weight: 400;

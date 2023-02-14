@@ -1,0 +1,265 @@
+@import "../../../assets/styles/variables";
+@import "../../../assets/styles/mixins";
+
+.main {
+  background-image: url("../../../assets/images/page/main-bckgrnd.png");
+  background-position: calc(50% + 210px) bottom;
+  background-repeat: no-repeat;
+  padding-top: 58px;
+  padding-bottom: 231px;
+
+  .container {
+    .main__title {
+      font-family: 'Lora', sans-serif;
+      font-weight: 400;
+      font-size: 60px;
+      line-height: 130%;
+      color: $color-secondary-01;
+      margin-bottom: 67px;
+    }
+
+    .main__text {
+      font-size: 18px;
+      line-height: 140%;
+      color: $color-primary;
+      max-width: 528px;
+    }
+  }
+}
+
+.offers {
+  background-color: #A4CBA3;
+  padding: 80px 0;
+
+  .container {
+    display: flex;
+    justify-content: space-between;
+
+    .offer {
+      width: 600px;
+      height: 250px;
+      padding: 35px 35px 0 35px;
+      border-radius: 5px;
+      box-sizing: border-box;
+      background-color: $color-secondary-05;
+
+
+      .offer__title {
+        font-size: 20px;
+        line-height: 130%;
+        color: $color-primary;
+      }
+
+      .offer__content {
+        display: flex;
+
+        .offer__text {
+          font-size: 16px;
+          line-height: 130%;
+          color: $color-primary;
+        }
+      }
+
+      &.offer-instagram {
+        .offer__image {
+          margin-top: 35px;
+        }
+
+        .offer__text {
+          margin-top: 16px;
+          margin-left: 58px;
+          max-width: 234px;
+        }
+
+        .offer__button {
+          margin-left: 168px;
+          margin-top: 22px;
+
+          .button {
+            width: 228px;
+          }
+        }
+      }
+
+      &.offer-collection {
+        .offer__title {
+          max-width: 362px;
+        }
+
+        .offer__image {
+          margin-left: 81px;
+          margin-top: 12px;
+        }
+
+        .offer__button {
+          margin-top: 75px;
+          margin-left: 44px;
+
+          .button {
+            width: 177px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.best-products {
+  padding-top: 120px;
+  padding-bottom: 130px;
+
+  .container {
+
+    .carousel__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 50px;
+
+      .carousel__title {
+        @include header-lora-32;
+      }
+
+      .carousel__arrows {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 30px;
+
+        a {
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}
+
+.info {
+  background-color: #A4CBA3;
+  background-image: url("../../../assets/images/page/info-bckgrnd.png");
+  background-position: calc(50% + 340px);
+  background-repeat: no-repeat;
+  padding: 80px 0;
+
+  .container {
+    .info__title {
+      @include header-lora-32;
+      margin-bottom: 5px;
+    }
+
+    .info__item {
+      margin-top: 35px;
+      color: #000000;
+      max-width: 442px;
+
+      .info__image {
+        margin-bottom: 30px;
+      }
+
+      .info__text {
+        font-size: 16px;
+
+        .info__text-extra {
+          font-family: 'Montserrat', sans-serif;
+          font-style: italic;
+          font-weight: 300;
+          line-height: 130%;
+          margin-top: 8px;
+        }
+      }
+
+      &.info__delivery {
+        .info__text:last-child {
+          margin-top: 16px;
+        }
+      }
+
+      &.info__payment {
+        .info__text {
+          margin-bottom: 10px;
+
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
+      }
+    }
+  }
+}
+
+.reviews {
+  margin: 130px 0;
+
+  .container {
+
+    .reviews__title {
+      @include header-lora-32;
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .reviews__carousel {
+      position: relative;
+
+      .review__item {
+        width: 396px;
+        height: 267px;
+        padding: 30px;
+        border: 2px solid $color-secondary-01;
+        border-radius: 10px;
+        box-sizing: border-box;
+
+        .review__item-head {
+          display: flex;
+          align-items: center;
+
+          .review__item-image {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-position: center;
+            background-size: cover;
+            margin-right: 26px;
+          }
+
+          .reviews__item-name {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 16px;
+            color: $color-primary;
+          }
+        }
+
+        .review__item-text {
+          margin-top: 15px;
+          font-size: 16px;
+          line-height: 140%;
+          color: $color-text-primary;
+        }
+      }
+
+      .reviews__arrows {
+        display: flex;
+
+        a {
+          top: calc(50% - 8px);
+          display: flex;
+          position: absolute;
+          cursor: pointer;
+
+          &.move-backward {
+            left: -41px;
+          }
+
+          &.move-forward {
+            right: -41px;
+          }
+        }
+      }
+    }
+  }
+}
+
+.map iframe {
+  vertical-align: bottom;
+}

@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {CategoryType} from "../../../../types/category.type";
+import {CategoryWithTypesType} from "../../../../types/category-with-types.type";
 
 @Component({
   selector: 'app-footer',
@@ -7,7 +8,7 @@ import {CategoryType} from "../../../../types/category.type";
   styleUrls: ['./footer.component.scss']
 })
 export class FooterComponent implements OnInit {
-  @Input() categories: CategoryType[] = [];
+  @Input() categories: CategoryWithTypesType[] = [];
 
   constructor() {
 

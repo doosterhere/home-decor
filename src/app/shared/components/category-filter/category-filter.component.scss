@@ -1,0 +1,68 @@
+@import "../../../../assets/styles/variables";
+
+.catalog__filter {
+  border-radius: 5px;
+  margin-bottom: 12px;
+  font-size: 16px;
+  color: $color-text-secondary;
+
+  .catalog__filter-head {
+    border-radius: 5px;
+    background-color: $color-secondary-03;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 23px;
+    cursor: pointer;
+
+    svg {
+      margin-top: 3px;
+    }
+  }
+
+  &.open .catalog__filter-head {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+
+    svg {
+      rotate: 180deg;
+    }
+  }
+
+  .catalog__filter-body {
+    display: none;
+    border: 1px solid $color-secondary-03;
+    border-radius: 0 0 5px 5px;
+    padding: 12px 16px;
+
+    .catalog__filter-checkbox {
+      display: flex;
+      align-items: baseline;
+      margin-bottom: 19px;
+      line-height: 130%;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      input {
+        margin-right: 10px;
+      }
+
+      input, span {
+        cursor: pointer;
+      }
+    }
+
+    .catalog__filter-from-to {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+    }
+  }
+
+  &.open .catalog__filter-body {
+    display: block;
+  }
+}

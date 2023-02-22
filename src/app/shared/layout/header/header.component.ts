@@ -5,6 +5,7 @@ import {DefaultResponseType} from "../../../../types/default-response.type";
 import {HttpErrorResponse} from "@angular/common/http";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Router} from "@angular/router";
+import {CategoryWithTypesType} from "../../../../types/category-with-types.type";
 
 @Component({
   selector: 'app-header',
@@ -12,7 +13,7 @@ import {Router} from "@angular/router";
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
-  @Input() categories: CategoryType[] = [];
+  @Input() categories: CategoryWithTypesType[] = [];
   isLogged: boolean = false;
 
   constructor(private authService: AuthService,

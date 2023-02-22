@@ -13,7 +13,7 @@ html, body {
 .input {
   box-sizing: border-box;
   padding: 17px 20px;
-  border: 2px solid #2A592E;
+  border: 2px solid $color-input-default;
   border-radius: 3px;
   font-family: 'Montserrat', sans-serif;
   font-weight: 400;
@@ -26,7 +26,7 @@ html, body {
 }
 
 .small-input {
-  border: 1px solid $color-secondary-02;
+  border: 1px solid $color-input-default;
   border-radius: 5px;
   text-align: center;
   padding: 2px;
@@ -37,6 +37,24 @@ html, body {
   font-weight: 400;
   font-size: 18px;
   color: $color-primary;
+}
+
+.input, .small-input {
+  &:hover,
+  &:focus,
+  &:active {
+    border-color: $color-input-action;
+  }
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input [type=number] {
+  -moz-appearance: textfield;
 }
 
 .button {
@@ -51,7 +69,15 @@ html, body {
   font-family: 'Montserrat', sans-serif;
   font-weight: 400;
   font-size: 16px;
-  color: $color-secondary-05;
+  color: $color-white;
+
+  &:hover {
+    background-color: $color-button-hover;
+  }
+
+  &:active {
+    background-color: $color-button-pressed;
+  }
 
   &:disabled {
     background-color: $color-button-disabled;
@@ -70,6 +96,6 @@ a.button {
 
   a {
     text-decoration: none;
-    color: $color-text-primary;
+    color: $color-text-secondary;
   }
 }

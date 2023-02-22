@@ -1,0 +1,189 @@
+@import "../../../../assets/styles/variables";
+
+.catalog {
+  padding-top: 100px;
+  padding-bottom: 110px;
+
+  .container {
+    .catalog__title {
+      font-family: 'Lora', sans-serif;
+      font-weight: 400;
+      font-size: 36px;
+      color: $color-primary;
+      margin-bottom: 33px;
+      margin-left: 317px;
+    }
+
+    .catalog__head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-left: 317px;
+      gap: 20px;
+
+      .catalog__applied-filters {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+
+        .catalog__applied-filter {
+          border: 1px solid $color-secondary-04;
+          border-radius: 50px;
+          font-size: 16px;
+          color: $color-text-secondary;
+          padding: 8px 14px;
+          display: flex;
+          align-items: center;
+
+          a {
+            text-decoration: none;
+            cursor: pointer;
+            display: flex;
+            margin-left: 8px;
+
+            &:hover svg g line {
+              stroke: $color-button-hover;
+            }
+          }
+        }
+      }
+
+      .catalog__sorting {
+        box-sizing: border-box;
+        position: relative;
+        font-size: 16px;
+        width: 190px;
+        //width: 257px;
+        min-width: 190px;
+        //min-width: 257px;
+        cursor: pointer;
+
+        .catalog__sorting-head {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          //padding: 12px 23px 12px 23px;
+          padding: 12px 0 12px 23px;
+          color: $color-text-secondary;
+
+          span {
+            margin-right: 16px;
+          }
+        }
+
+        .catalog__sorting-body {
+          position: absolute;
+          width: 100%;
+          box-sizing: border-box;
+          z-index: 3;
+          display: none;
+          padding: 12px 23px;
+          background-color: #F5F5F5;
+          border-radius: 0 0 5px 5px;
+          color: #8E8E8E;
+
+          .catalog__sorting-item {
+            margin-bottom: 14px;
+
+            &:hover {
+              color: $color-secondary-02;
+            }
+
+            &:last-child {
+              margin-bottom: 0;
+            }
+
+            &.active {
+              color: #313131;
+            }
+          }
+        }
+
+        &.open {
+          width: 257px;
+          min-width: 257px;
+
+          .catalog__sorting-head {
+            color: $color-black;
+            border-radius: 5px 5px 0 0;
+            background: #EBEBEB;
+            padding-right: 23px;
+
+            svg {
+              rotate: 180deg;
+            }
+          }
+
+          .catalog__sorting-body {
+            display: block;
+          }
+        }
+      }
+    }
+
+    .catalog__layout {
+      margin-top: 30px;
+      display: flex;
+
+      .catalog__filters {
+        width: 257px;
+        min-width: 257px;
+        margin-right: 58px;
+      }
+
+      .catalog__items {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px 26px;
+      }
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 79px;
+
+      .pagination-arrow {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &.disabled {
+          opacity: 0.3;
+          cursor: unset;
+        }
+      }
+
+      .pagination__pages {
+        margin: 0 30px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+
+        .pagination__page {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 60px;
+          height: 60px;
+          cursor: pointer;
+          text-decoration: none;
+          font-size: 20px;
+          color: $color-text-secondary;
+          border-radius: 50%;
+          user-select: none;
+
+          &:hover {
+            background-color: $color-secondary-04;
+          }
+
+          &.active {
+            background-color: $color-secondary-03;
+          }
+        }
+      }
+    }
+  }
+}

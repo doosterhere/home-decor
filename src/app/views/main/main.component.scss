@@ -107,31 +107,6 @@
 .best-products {
   padding-top: 120px;
   padding-bottom: 130px;
-
-  .container {
-
-    .carousel__header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 50px;
-
-      .carousel__title {
-        @include header-lora-32;
-      }
-
-      .carousel__arrows {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 30px;
-
-        a {
-          cursor: pointer;
-        }
-      }
-    }
-  }
 }
 
 .info {

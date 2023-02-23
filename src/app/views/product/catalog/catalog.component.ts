@@ -16,6 +16,7 @@ import {debounceTime} from "rxjs";
 })
 export class CatalogComponent implements OnInit {
   products: ProductType[] = [];
+  requestSuccess: boolean = false;
   categoriesWithTypes: CategoryWithTypesType[] = [];
   activeParams: ActiveParamsType = {types: []};
   appliedFilters: AppliedFilterType[] = [];
@@ -44,60 +45,66 @@ export class CatalogComponent implements OnInit {
             debounceTime(500)
           )
           .subscribe(params => {
-          this.activeParams = ActiveParamsUtil.processParams(params);
+            this.activeParams = ActiveParamsUtil.processParams(params);
 
-          this.appliedFilters = [];
+            this.appliedFilters = [];
 
-          this.activeParams.types.forEach(url => {
-            for (let i = 0; i < this.categoriesWithTypes.length; i++) {
-              const foundType = this.categoriesWithTypes[i].types.find(type => type.url === url);
+            this.activeParams.types.forEach(url => {
+              for (let i = 0; i < this.categoriesWithTypes.length; i++) {
+                const foundType = this.categoriesWithTypes[i].types.find(type => type.url === url);
 
-              if (foundType) {
-                this.appliedFilters.push({
-                  name: foundType.name,
-                  urlParam: foundType.url
-                });
+                if (foundType) {
+                  this.appliedFilters.push({
+                    name: foundType.name,
+                    urlParam: foundType.url
+                  });
+                }
               }
-            }
-          });
-
-          if (this.activeParams.heightFrom) {
-            this.appliedFilters.push({
-              name: 'Высота: от ' + this.activeParams.heightFrom + ' см',
-              urlParam: 'heightFrom'
             });
-          }
 
-          if (this.activeParams.heightTo) {
-            this.appliedFilters.push({
-              name: 'Высота: до ' + this.activeParams.heightTo + ' см',
-              urlParam: 'heightTo'
-            });
-          }
-
-          if (this.activeParams.diameterFrom) {
-            this.appliedFilters.push({
-              name: 'Диаметр: от ' + this.activeParams.diameterFrom + ' см',
-              urlParam: 'diameterFrom'
-            });
-          }
-
-          if (this.activeParams.diameterTo) {
-            this.appliedFilters.push({
-              name: 'Диаметр: до ' + this.activeParams.diameterTo + ' см',
-              urlParam: 'diameterTo'
-            });
-          }
-
-          this.productService.getProducts(this.activeParams).subscribe(data => {
-            this.pages = [];
-            for (let i = 1; i <= data.pages; i++) {
-              this.pages.push(i);
+            if (this.activeParams.heightFrom) {
+              this.appliedFilters.push({
+                name: 'Высота: от ' + this.activeParams.heightFrom + ' см',
+                urlParam: 'heightFrom'
+              });
             }
 
-            this.products = data.items;
+            if (this.activeParams.heightTo) {
+              this.appliedFilters.push({
+                name: 'Высота: до ' + this.activeParams.heightTo + ' см',
+                urlParam: 'heightTo'
+              });
+            }
+
+            if (this.activeParams.diameterFrom) {
+              this.appliedFilters.push({
+                name: 'Диаметр: от ' + this.activeParams.diameterFrom + ' см',
+                urlParam: 'diameterFrom'
+              });
+            }
+
+            if (this.activeParams.diameterTo) {
+              this.appliedFilters.push({
+                name: 'Диаметр: до ' + this.activeParams.diameterTo + ' см',
+                urlParam: 'diameterTo'
+              });
+            }
+
+            this.productService.getProducts(this.activeParams).subscribe({
+              next: (data) => {
+                this.pages = [];
+                for (let i = 1; i <= data.pages; i++) {
+                  this.pages.push(i);
+                }
+                this.requestSuccess = true;
+                this.products = data.items;
+              },
+              error: (error) => {
+                this.requestSuccess = false;
+                throw new Error(error.message);
+              }
+            });
           });
-        });
       });
   }
 

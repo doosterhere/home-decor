@@ -7,3 +7,11 @@
   font-size: 32px;
   color: $color-primary;
 }
+
+@mixin header-lora-36 {
+  font-family: 'Lora', sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 36px;
+  color: $color-black;
+}

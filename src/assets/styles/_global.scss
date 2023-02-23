@@ -65,11 +65,32 @@ input [type=number] {
   border-radius: 5px;
   box-sizing: border-box;
   cursor: pointer;
-  border: 0;
+  border: 1px solid transparent;
   font-family: 'Montserrat', sans-serif;
   font-weight: 400;
   font-size: 16px;
   color: $color-white;
+
+  &.button_transparent {
+    background-color: transparent;
+    border: 1px solid $color-button-hover;
+    color: $color-primary;
+
+    &:hover {
+      color: $color-white;
+    }
+  }
+
+  &.button_with-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+
+    &:hover svg path {
+      fill: $color-white;
+    }
+  }
 
   &:hover {
     background-color: $color-button-hover;
@@ -97,5 +118,27 @@ a.button {
   a {
     text-decoration: none;
     color: $color-text-secondary;
+  }
+}
+
+.carousel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 50px;
+
+  .carousel__title {
+    @include header-lora-32;
+  }
+
+  .carousel__arrows {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+
+    a {
+      cursor: pointer;
+    }
   }
 }

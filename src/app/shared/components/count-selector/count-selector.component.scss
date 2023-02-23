@@ -1,0 +1,23 @@
+@import "../../../../assets/styles/variables";
+
+.count-selector {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 97px;
+
+  div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+
+    &:first-child {
+      width: 12px;
+    }
+
+    &:hover path {
+      fill: $color-primary-light;
+    }
+  }
+}

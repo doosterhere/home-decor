@@ -107,6 +107,6 @@ export class MainComponent implements OnInit {
         if (data.length) {
           this.products = data;
         }
-      })
+      });
   }
 }

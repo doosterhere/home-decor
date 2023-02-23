@@ -1,10 +1,9 @@
 import {Component, OnInit} from '@angular/core';
-import {CategoryType} from "../../../types/category.type";
 import {CategoryService} from "../services/category.service";
 import {CategoryWithTypesType} from "../../../types/category-with-types.type";
 
 @Component({
-  selector: 'app-layout',
+  selector: 'layout',
   templateUrl: './layout.component.html'
 })
 export class LayoutComponent implements OnInit {

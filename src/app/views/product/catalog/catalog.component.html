@@ -41,10 +41,10 @@
         <category-filter type="height"></category-filter>
         <category-filter type="diameter"></category-filter>
       </div>
-      <div class="catalog__items" *ngIf="products.length">
+      <div class="catalog__items" *ngIf="products.length && requestSuccess">
         <product-card [product]="product" *ngFor="let product of products"></product-card>
       </div>
-      <div *ngIf="!products.length">
+      <div *ngIf="!products.length && requestSuccess">
         Ничего не найдено. Попробуйте изменить параметры поиска
       </div>
     </div>

@@ -11,6 +11,10 @@ import {debounceTime} from "rxjs";
 import {CartType} from "../../../../types/cart.type";
 import {CartService} from "../../../shared/services/cart.service";
 import {DefaultResponseType} from "../../../../types/default-response.type";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {FavoritesService} from "../../../shared/services/favorites.service";
+import {FavoritesType} from "../../../../types/favorites.type";
+import {AuthService} from "../../../core/auth/auth.service";
 
 @Component({
   selector: 'app-catalog',
@@ -19,6 +23,7 @@ import {DefaultResponseType} from "../../../../types/default-response.type";
 })
 export class CatalogComponent implements OnInit {
   products: ProductType[] = [];
+  favoriteProducts: FavoritesType[] | null = null;
   requestSuccess: boolean = false;
   categoriesWithTypes: CategoryWithTypesType[] = [];
   activeParams: ActiveParamsType = {types: []};
@@ -37,18 +42,47 @@ export class CatalogComponent implements OnInit {
               private categoryService: CategoryService,
               private activatedRoute: ActivatedRoute,
               private router: Router,
-              private cartService: CartService) {
+              private cartService: CartService,
+              private _snackBar: MatSnackBar,
+              private favoritesService: FavoritesService,
+              private authService: AuthService) {
   }
 
   ngOnInit(): void {
     this.cartService.getCart().subscribe((data: CartType | DefaultResponseType) => {
       if ((data as DefaultResponseType).error) {
-        throw new Error((data as DefaultResponseType).message);
+        const message = (data as DefaultResponseType).message;
+        this._snackBar.open((data as DefaultResponseType).message);
+        throw new Error(message);
       }
 
       this.cart = data as CartType;
-    })
 
+      if (this.authService.isLogged) {
+        this.favoritesService.getFavorites().subscribe({
+          next: (data: FavoritesType[] | DefaultResponseType) => {
+            if ((data as DefaultResponseType).error) {
+              const message = (data as DefaultResponseType).message;
+              this.processCatalog();
+              throw new Error(message);
+            }
+
+            this.favoriteProducts = data as FavoritesType[];
+            this.processCatalog();
+          },
+          error: (error) => {
+            this.processCatalog();
+          },
+        });
+      }
+
+      if (!this.authService.isLogged) {
+        this.processCatalog();
+      }
+    })
+  }
+
+  processCatalog(): void {
     this.categoryService.getCategoriesWithTypes()
       .subscribe(data => {
         this.categoriesWithTypes = data;
@@ -126,6 +160,16 @@ export class CatalogComponent implements OnInit {
 
                 if (!this.cart || this.cart.items.length === 0) {
                   this.products = data.items;
+                }
+
+                if (this.favoriteProducts) {
+                  this.products = this.products.map(product => {
+                    if (this.favoriteProducts?.find(item => item.id === product.id)) {
+                      product.inFavorites = true;
+                    }
+
+                    return product;
+                  })
                 }
 
               },

@@ -90,4 +90,16 @@ export class AuthService {
       refreshToken: localStorage.getItem(this.refreshTokenKey)
     }
   }
+
+  refresh(): Observable<DefaultResponseType | LoginResponseType> {
+    const tokens = this.getTokens();
+
+    if (tokens && tokens.refreshToken) {
+      return this.httpClient.post<DefaultResponseType | LoginResponseType>(environment.api + 'refresh', {
+        refreshToken: tokens.refreshToken
+      });
+    }
+
+    throw throwError(() => 'Can not use token');
+  }
 }

@@ -6,6 +6,7 @@ import {CartType} from "../../../../types/cart.type";
 import {CartService} from "../../../shared/services/cart.service";
 import {environment} from "../../../../environments/environment";
 import {DefaultResponseType} from "../../../../types/default-response.type";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'cart',
@@ -45,7 +46,8 @@ export class CartComponent implements OnInit {
   totalCount: number = 0;
 
   constructor(private productService: ProductService,
-              private cartService: CartService) {
+              private cartService: CartService,
+              private _snackBar: MatSnackBar) {
   }
 
   ngOnInit(): void {
@@ -54,8 +56,12 @@ export class CartComponent implements OnInit {
         this.extraProducts = data;
       });
 
-    this.cartService.getCart().subscribe((data: CartType) => {
-      this.cart = data;
+    this.cartService.getCart().subscribe((data: CartType | DefaultResponseType) => {
+      if ((data as DefaultResponseType).error) {
+        throw new Error((data as DefaultResponseType).message);
+      }
+
+      this.cart = data as CartType;
       this.calculateTotal();
     });
   }
@@ -76,7 +82,9 @@ export class CartComponent implements OnInit {
     if (this.cart) {
       this.cartService.updateCart(productId, count).subscribe((data: CartType | DefaultResponseType) => {
         if ((data as DefaultResponseType).error) {
-          throw new Error((data as DefaultResponseType).message);
+          const message = (data as DefaultResponseType).message;
+          this._snackBar.open((data as DefaultResponseType).message);
+          throw new Error(message);
         }
 
         this.cart = data as CartType;

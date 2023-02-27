@@ -5,6 +5,7 @@ import {Router} from "@angular/router";
 import {CategoryWithTypesType} from "../../../../types/category-with-types.type";
 import {CartService} from "../../services/cart.service";
 import {Subject} from "rxjs";
+import {DefaultResponseType} from "../../../../types/default-response.type";
 
 @Component({
   selector: 'app-header',
@@ -28,10 +29,12 @@ export class HeaderComponent implements OnInit {
       this.isLogged = isLogged;
     });
 
-    this.cartService.getCartCount().subscribe((data: { count: number }) => {
-      if (data) {
-        this.count = data.count;
+    this.cartService.getCartCount().subscribe((data: { count: number } | DefaultResponseType) => {
+      if ((data as DefaultResponseType).error) {
+        throw new Error((data as DefaultResponseType).message);
       }
+
+      this.count = (data as { count: number }).count;
     });
 
     this.cartService.count$.subscribe(count => {
@@ -40,15 +43,14 @@ export class HeaderComponent implements OnInit {
   }
 
   logout(): void {
-    this.authService.logout()
-      .subscribe({
-        next: () => {
-          this.doLogout();
-        },
-        error: () => {
-          this.doLogout();
-        }
-      });
+    this.authService.logout().subscribe({
+      next: () => {
+        this.doLogout();
+      },
+      error: () => {
+        this.doLogout();
+      }
+    });
   }
 
   doLogout(): void {

@@ -7,6 +7,10 @@ import {environment} from "../../../../environments/environment";
 import {CartType} from "../../../../types/cart.type";
 import {DefaultResponseType} from "../../../../types/default-response.type";
 import {CartService} from "../../../shared/services/cart.service";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {FavoritesService} from "../../../shared/services/favorites.service";
+import {FavoritesType} from "../../../../types/favorites.type";
+import {AuthService} from "../../../core/auth/auth.service";
 
 @Component({
   selector: 'app-detail',
@@ -46,27 +50,47 @@ export class DetailComponent implements OnInit {
 
   constructor(private productService: ProductService,
               private activatedRoute: ActivatedRoute,
-              private cartService: CartService) {
+              private cartService: CartService,
+              private _snackBar: MatSnackBar,
+              private favoriteService: FavoritesService,
+              private authService: AuthService) {
   }
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(params => {
       this.productService.getProduct(params['url'])
         .subscribe((data: ProductType) => {
+          this.product = data;
+
           this.cartService.getCart().subscribe((cartData: CartType | DefaultResponseType) => {
             if ((cartData as DefaultResponseType).error) {
-              throw new Error((cartData as DefaultResponseType).message);
-            }
-            if (cartData) {
-              const productInCart = (cartData as CartType).items.find(item => item.product.id === data.id);
-              if (productInCart) {
-                data.countInCart = productInCart.quantity;
-                this.count = data.countInCart;
-              }
+              const message = (cartData as DefaultResponseType).message;
+              this._snackBar.open((cartData as DefaultResponseType).message);
+              throw new Error(message);
             }
 
-            this.product = data;
+            if (cartData) {
+              const productInCart = (cartData as CartType).items.find(item => item.product.id === this.product.id);
+              if (productInCart) {
+                this.product.countInCart = productInCart.quantity;
+                this.count = this.product.countInCart;
+              }
+            }
           });
+
+          if (this.authService.isLogged) {
+            this.favoriteService.getFavorites().subscribe((data: DefaultResponseType | FavoritesType[]) => {
+              if ((data as DefaultResponseType).error) {
+                const message = (data as DefaultResponseType).message;
+                throw new Error(message);
+              }
+
+              const favorites: FavoritesType[] = data as FavoritesType[];
+              if (favorites.find(item => item.id === this.product.id)) {
+                this.product.inFavorites = true;
+              }
+            });
+          }
 
           if (!data) {
             //если в data пусто -> переход на 404
@@ -85,7 +109,9 @@ export class DetailComponent implements OnInit {
   addToCart(): void {
     this.cartService.updateCart(this.product.id, this.count).subscribe((data: CartType | DefaultResponseType) => {
       if ((data as DefaultResponseType).error) {
-        throw new Error((data as DefaultResponseType).message);
+        const message = (data as DefaultResponseType).message;
+        this._snackBar.open((data as DefaultResponseType).message);
+        throw new Error(message);
       }
 
       this.product.countInCart = this.count;
@@ -95,7 +121,9 @@ export class DetailComponent implements OnInit {
   removeFromCart(): void {
     this.cartService.updateCart(this.product.id, 0).subscribe((data: CartType | DefaultResponseType) => {
       if ((data as DefaultResponseType).error) {
-        throw new Error((data as DefaultResponseType).message);
+        const message = (data as DefaultResponseType).message;
+        this._snackBar.open((data as DefaultResponseType).message);
+        throw new Error(message);
       }
 
       this.product.countInCart = 0;
@@ -107,6 +135,36 @@ export class DetailComponent implements OnInit {
     this.count = value;
     if (this.product.countInCart) {
       this.addToCart();
+    }
+  }
+
+  updateFavorites(): void {
+    if (!this.authService.isLogged) {
+      this._snackBar.open('Для добавления в избранное необходимо авторизоваться');
+      return;
+    }
+
+    if (this.product.inFavorites) {
+      this.favoriteService.removeFromFavorites(this.product.id).subscribe((data: DefaultResponseType) => {
+        if (data.error) {
+          this._snackBar.open(data.message);
+          throw new Error(data.message);
+        }
+
+        this.product.inFavorites = false;
+      });
+    }
+
+    if (!this.product.inFavorites) {
+      this.favoriteService.addToFavorites(this.product.id).subscribe((data: DefaultResponseType | FavoritesType) => {
+        if ((data as DefaultResponseType).error) {
+          const message = (data as DefaultResponseType).message;
+          this._snackBar.open((data as DefaultResponseType).message);
+          throw new Error(message);
+        }
+
+        this.product.inFavorites = true;
+      });
     }
   }
 }

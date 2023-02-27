@@ -4,6 +4,9 @@ import {ProductType} from "../../../../types/product.type";
 import {ProductService} from "../../../shared/services/product.service";
 import {ActivatedRoute} from "@angular/router";
 import {environment} from "../../../../environments/environment";
+import {CartType} from "../../../../types/cart.type";
+import {DefaultResponseType} from "../../../../types/default-response.type";
+import {CartService} from "../../../shared/services/cart.service";
 
 @Component({
   selector: 'app-detail',
@@ -15,7 +18,6 @@ export class DetailComponent implements OnInit {
   product!: ProductType;
   serverStaticPath: string = environment.serverStaticPath;
   count: number = 1;
-
   customOptions: OwlOptions = {
     loop: true,
     mouseDrag: false,
@@ -43,14 +45,28 @@ export class DetailComponent implements OnInit {
   }
 
   constructor(private productService: ProductService,
-              private activatedRoute: ActivatedRoute) {
+              private activatedRoute: ActivatedRoute,
+              private cartService: CartService) {
   }
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe(params => {
       this.productService.getProduct(params['url'])
         .subscribe((data: ProductType) => {
-          this.product = data;
+          this.cartService.getCart().subscribe((cartData: CartType | DefaultResponseType) => {
+            if ((cartData as DefaultResponseType).error) {
+              throw new Error((cartData as DefaultResponseType).message);
+            }
+            if (cartData) {
+              const productInCart = (cartData as CartType).items.find(item => item.product.id === data.id);
+              if (productInCart) {
+                data.countInCart = productInCart.quantity;
+                this.count = data.countInCart;
+              }
+            }
+
+            this.product = data;
+          });
 
           if (!data) {
             //если в data пусто -> переход на 404
@@ -66,11 +82,31 @@ export class DetailComponent implements OnInit {
       });
   }
 
-  updateCounter(value: number): void {
-    this.count = value;
+  addToCart(): void {
+    this.cartService.updateCart(this.product.id, this.count).subscribe((data: CartType | DefaultResponseType) => {
+      if ((data as DefaultResponseType).error) {
+        throw new Error((data as DefaultResponseType).message);
+      }
+
+      this.product.countInCart = this.count;
+    });
   }
 
-  addToCart(): void {
-    alert('Добавлено в корзину: ' + this.count);
+  removeFromCart(): void {
+    this.cartService.updateCart(this.product.id, 0).subscribe((data: CartType | DefaultResponseType) => {
+      if ((data as DefaultResponseType).error) {
+        throw new Error((data as DefaultResponseType).message);
+      }
+
+      this.product.countInCart = 0;
+      this.count = 1;
+    });
+  }
+
+  updateCount(value: number): void {
+    this.count = value;
+    if (this.product.countInCart) {
+      this.addToCart();
+    }
   }
 }

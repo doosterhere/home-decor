@@ -8,6 +8,9 @@ import {ActiveParamsType} from "../../../../types/active-params.type";
 import {ActiveParamsUtil} from "../../../shared/utils/active-params.util";
 import {AppliedFilterType} from "../../../../types/applied-filter.type";
 import {debounceTime} from "rxjs";
+import {CartType} from "../../../../types/cart.type";
+import {CartService} from "../../../shared/services/cart.service";
+import {DefaultResponseType} from "../../../../types/default-response.type";
 
 @Component({
   selector: 'app-catalog',
@@ -28,14 +31,24 @@ export class CatalogComponent implements OnInit {
     {name: 'По убыванию цены', value: 'price-desc'},
   ];
   pages: number[] = [];
+  cart: CartType | null = null;
 
   constructor(private productService: ProductService,
               private categoryService: CategoryService,
               private activatedRoute: ActivatedRoute,
-              private router: Router) {
+              private router: Router,
+              private cartService: CartService) {
   }
 
   ngOnInit(): void {
+    this.cartService.getCart().subscribe((data: CartType | DefaultResponseType) => {
+      if ((data as DefaultResponseType).error) {
+        throw new Error((data as DefaultResponseType).message);
+      }
+
+      this.cart = data as CartType;
+    })
+
     this.categoryService.getCategoriesWithTypes()
       .subscribe(data => {
         this.categoriesWithTypes = data;
@@ -97,7 +110,24 @@ export class CatalogComponent implements OnInit {
                   this.pages.push(i);
                 }
                 this.requestSuccess = true;
-                this.products = data.items;
+
+                if (this.cart && this.cart.items.length > 0) {
+                  this.products = data.items.map(product => {
+                    if (this.cart) {
+                      const productInCart = this.cart.items.find(item => item.product.id === product.id);
+                      if (productInCart) {
+                        product.countInCart = productInCart.quantity;
+                      }
+                    }
+
+                    return product;
+                  });
+                }
+
+                if (!this.cart || this.cart.items.length === 0) {
+                  this.products = data.items;
+                }
+
               },
               error: (error) => {
                 this.requestSuccess = false;

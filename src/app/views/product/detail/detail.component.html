@@ -89,7 +89,7 @@
         <div class="detail__info-params">
           <div class="detail__info-params-count">
             <span>Количество: </span>
-            <count-selector (onCountChange)="updateCounter($event)"></count-selector>
+            <count-selector [count]="count" (onCountChange)="updateCount($event)"></count-selector>
           </div>
           <div class="detail__info-params-price">{{product.price}} BYN</div>
         </div>
@@ -105,7 +105,12 @@
             </span>
             В избранное
           </button>
-          <button class="button" (click)="addToCart()">В корзину</button>
+          <button class="button" (click)="addToCart()" *ngIf="!product.countInCart">В корзину</button>
+          <button class="button button_transparent button_in-cart" (click)="removeFromCart()"
+                  *ngIf="product.countInCart">
+            <span>В корзине</span>
+            <span>Удалить</span>
+          </button>
         </div>
       </div>
     </div>

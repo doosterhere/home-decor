@@ -92,6 +92,26 @@ input [type=number] {
     }
   }
 
+  &.button_in-cart {
+    span:first-child {
+      display: inline;
+    }
+
+    span:last-child {
+      display: none;
+    }
+
+    &:hover {
+      span:first-child {
+        display: none;
+      }
+
+      span:last-child {
+        display: inline;
+      }
+    }
+  }
+
   &:hover {
     background-color: $color-button-hover;
   }

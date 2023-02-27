@@ -1,0 +1,87 @@
+import {Component, OnInit} from '@angular/core';
+import {OwlOptions} from "ngx-owl-carousel-o";
+import {ProductType} from "../../../../types/product.type";
+import {ProductService} from "../../../shared/services/product.service";
+import {CartType} from "../../../../types/cart.type";
+import {CartService} from "../../../shared/services/cart.service";
+import {environment} from "../../../../environments/environment";
+import {DefaultResponseType} from "../../../../types/default-response.type";
+
+@Component({
+  selector: 'cart',
+  templateUrl: './cart.component.html',
+  styleUrls: ['./cart.component.scss']
+})
+export class CartComponent implements OnInit {
+  extraProducts: ProductType[] = [];
+  customOptions: OwlOptions = {
+    loop: true,
+    mouseDrag: false,
+    touchDrag: false,
+    pullDrag: false,
+    dots: false,
+    navSpeed: 700,
+    margin: 25,
+    navText: ['', ''],
+    responsive: {
+      0: {
+        items: 1
+      },
+      400: {
+        items: 2
+      },
+      740: {
+        items: 3
+      },
+      940: {
+        items: 4
+      }
+    },
+    nav: false
+  }
+  cart: CartType | null = null;
+  serverStaticPath = environment.serverStaticPath;
+  totalAmount: number = 0;
+  totalCount: number = 0;
+
+  constructor(private productService: ProductService,
+              private cartService: CartService) {
+  }
+
+  ngOnInit(): void {
+    this.productService.getBestProducts()
+      .subscribe((data: ProductType[]) => {
+        this.extraProducts = data;
+      });
+
+    this.cartService.getCart().subscribe((data: CartType) => {
+      this.cart = data;
+      this.calculateTotal();
+    });
+  }
+
+  calculateTotal(): void {
+    this.totalAmount = 0;
+    this.totalCount = 0;
+
+    if (this.cart) {
+      this.cart.items.forEach(item => {
+        this.totalAmount += item.product.price * item.quantity;
+        this.totalCount += item.quantity;
+      });
+    }
+  }
+
+  updateCount(productId: string, count: number): void {
+    if (this.cart) {
+      this.cartService.updateCart(productId, count).subscribe((data: CartType | DefaultResponseType) => {
+        if ((data as DefaultResponseType).error) {
+          throw new Error((data as DefaultResponseType).message);
+        }
+
+        this.cart = data as CartType;
+        this.calculateTotal();
+      });
+    }
+  }
+}

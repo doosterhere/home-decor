@@ -101,6 +101,7 @@
             font-weight: 700;
             font-size: 40px;
             color: #313131;
+            user-select: none;
           }
         }
 
@@ -113,7 +114,7 @@
           .button {
             width: 290px;
 
-            &.button_transparent {
+            &.button_transparent.button_with-icon {
               width: 307px;
             }
           }

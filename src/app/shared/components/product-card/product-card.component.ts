@@ -68,33 +68,7 @@ export class ProductCardComponent implements OnInit {
   }
 
   updateFavorites(): void {
-    if (!this.authService.isLogged) {
-      this._snackBar.open('Для добавления в избранное необходимо авторизоваться');
-      return;
-    }
-
-    if (this.product.inFavorites) {
-      this.favoriteService.removeFromFavorites(this.product.id).subscribe((data: DefaultResponseType) => {
-        if (data.error) {
-          this._snackBar.open(data.message);
-          throw new Error(data.message);
-        }
-
-        this.product.inFavorites = false;
-      });
-    }
-
-    if (!this.product.inFavorites) {
-      this.favoriteService.addToFavorites(this.product.id).subscribe((data: DefaultResponseType | FavoritesType) => {
-        if ((data as DefaultResponseType).error) {
-          const message = (data as DefaultResponseType).message;
-          this._snackBar.open((data as DefaultResponseType).message);
-          throw new Error(message);
-        }
-
-        this.product.inFavorites = true;
-      });
-    }
+    FavoritesService.updateFavorites(this.authService, this.favoriteService, this.product, this._snackBar);
   }
 
   navigate(): void {

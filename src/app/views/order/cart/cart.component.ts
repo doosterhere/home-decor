@@ -7,6 +7,7 @@ import {CartService} from "../../../shared/services/cart.service";
 import {environment} from "../../../../environments/environment";
 import {DefaultResponseType} from "../../../../types/default-response.type";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {CartUtil} from "../../../shared/utils/cart.util";
 
 @Component({
   selector: 'cart',
@@ -62,20 +63,8 @@ export class CartComponent implements OnInit {
       }
 
       this.cart = data as CartType;
-      this.calculateTotal();
+      [this.totalAmount, this.totalCount] = CartUtil.calculateTotal(this.cart);
     });
-  }
-
-  calculateTotal(): void {
-    this.totalAmount = 0;
-    this.totalCount = 0;
-
-    if (this.cart) {
-      this.cart.items.forEach(item => {
-        this.totalAmount += item.product.price * item.quantity;
-        this.totalCount += item.quantity;
-      });
-    }
   }
 
   updateCount(productId: string, count: number): void {
@@ -83,12 +72,12 @@ export class CartComponent implements OnInit {
       this.cartService.updateCart(productId, count).subscribe((data: CartType | DefaultResponseType) => {
         if ((data as DefaultResponseType).error) {
           const message = (data as DefaultResponseType).message;
-          this._snackBar.open((data as DefaultResponseType).message);
+          this._snackBar.open(message);
           throw new Error(message);
         }
 
         this.cart = data as CartType;
-        this.calculateTotal();
+        [this.totalAmount, this.totalCount] = CartUtil.calculateTotal(this.cart);
       });
     }
   }

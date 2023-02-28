@@ -52,7 +52,7 @@ export class CatalogComponent implements OnInit {
     this.cartService.getCart().subscribe((data: CartType | DefaultResponseType) => {
       if ((data as DefaultResponseType).error) {
         const message = (data as DefaultResponseType).message;
-        this._snackBar.open((data as DefaultResponseType).message);
+        this._snackBar.open(message);
         throw new Error(message);
       }
 

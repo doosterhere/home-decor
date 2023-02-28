@@ -11,6 +11,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {FavoritesService} from "../../../shared/services/favorites.service";
 import {FavoritesType} from "../../../../types/favorites.type";
 import {AuthService} from "../../../core/auth/auth.service";
+import {FavoritesUtil} from "../../../shared/utils/favorites.util";
 
 @Component({
   selector: 'app-detail',
@@ -65,7 +66,7 @@ export class DetailComponent implements OnInit {
           this.cartService.getCart().subscribe((cartData: CartType | DefaultResponseType) => {
             if ((cartData as DefaultResponseType).error) {
               const message = (cartData as DefaultResponseType).message;
-              this._snackBar.open((cartData as DefaultResponseType).message);
+              this._snackBar.open(message);
               throw new Error(message);
             }
 
@@ -110,7 +111,7 @@ export class DetailComponent implements OnInit {
     this.cartService.updateCart(this.product.id, this.count).subscribe((data: CartType | DefaultResponseType) => {
       if ((data as DefaultResponseType).error) {
         const message = (data as DefaultResponseType).message;
-        this._snackBar.open((data as DefaultResponseType).message);
+        this._snackBar.open(message);
         throw new Error(message);
       }
 
@@ -122,7 +123,7 @@ export class DetailComponent implements OnInit {
     this.cartService.updateCart(this.product.id, 0).subscribe((data: CartType | DefaultResponseType) => {
       if ((data as DefaultResponseType).error) {
         const message = (data as DefaultResponseType).message;
-        this._snackBar.open((data as DefaultResponseType).message);
+        this._snackBar.open(message);
         throw new Error(message);
       }
 
@@ -139,6 +140,6 @@ export class DetailComponent implements OnInit {
   }
 
   updateFavorites(): void {
-    FavoritesService.updateFavorites(this.authService, this.favoriteService, this.product, this._snackBar);
+    FavoritesUtil.updateFavorites(this.authService, this.favoriteService, this.product, this._snackBar);
   }
 }

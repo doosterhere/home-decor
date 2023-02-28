@@ -22,7 +22,7 @@ export class FavoritesComponent implements OnInit {
     this.favoriteService.getFavorites().subscribe((data: FavoritesType[] | DefaultResponseType) => {
       if ((data as DefaultResponseType).error) {
         const message = (data as DefaultResponseType).message;
-        this._snackBar.open((data as DefaultResponseType).message);
+        this._snackBar.open(message);
         throw new Error(message);
       }
 

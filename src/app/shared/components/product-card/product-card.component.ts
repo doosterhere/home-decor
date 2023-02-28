@@ -5,10 +5,10 @@ import {CartService} from "../../services/cart.service";
 import {CartType} from "../../../../types/cart.type";
 import {DefaultResponseType} from "../../../../types/default-response.type";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {FavoritesType} from "../../../../types/favorites.type";
 import {AuthService} from "../../../core/auth/auth.service";
 import {FavoritesService} from "../../services/favorites.service";
 import {Router} from "@angular/router";
+import {FavoritesUtil} from "../../utils/favorites.util";
 
 @Component({
   selector: 'product-card',
@@ -39,7 +39,7 @@ export class ProductCardComponent implements OnInit {
     this.cartService.updateCart(this.product.id, this.count).subscribe((data: CartType | DefaultResponseType) => {
       if ((data as DefaultResponseType).error) {
         const message = (data as DefaultResponseType).message;
-        this._snackBar.open((data as DefaultResponseType).message);
+        this._snackBar.open(message);
         throw new Error(message);
       }
 
@@ -51,7 +51,7 @@ export class ProductCardComponent implements OnInit {
     this.cartService.updateCart(this.product.id, 0).subscribe((data: CartType | DefaultResponseType) => {
       if ((data as DefaultResponseType).error) {
         const message = (data as DefaultResponseType).message;
-        this._snackBar.open((data as DefaultResponseType).message);
+        this._snackBar.open(message);
         throw new Error(message);
       }
 
@@ -68,7 +68,7 @@ export class ProductCardComponent implements OnInit {
   }
 
   updateFavorites(): void {
-    FavoritesService.updateFavorites(this.authService, this.favoriteService, this.product, this._snackBar);
+    FavoritesUtil.updateFavorites(this.authService, this.favoriteService, this.product, this._snackBar);
   }
 
   navigate(): void {

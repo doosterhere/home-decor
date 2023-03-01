@@ -10,7 +10,6 @@ import {OwlOptions} from "ngx-owl-carousel-o";
 })
 export class MainComponent implements OnInit {
   products: ProductType[] = [];
-
   customOptions: OwlOptions = {
     loop: true,
     mouseDrag: false,
@@ -36,7 +35,6 @@ export class MainComponent implements OnInit {
     },
     nav: false
   }
-
   customOptionsReviews: OwlOptions = {
     loop: true,
     mouseDrag: false,
@@ -59,7 +57,6 @@ export class MainComponent implements OnInit {
     },
     nav: false
   }
-
   reviews: { name: string, image: string, text: string }[] = [
     {
       name: 'Ирина',

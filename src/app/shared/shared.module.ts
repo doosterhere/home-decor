@@ -7,7 +7,6 @@ import {FormsModule} from "@angular/forms";
 import {CategoryFilterComponent} from './components/category-filter/category-filter.component';
 import {CountSelectorComponent} from './components/count-selector/count-selector.component';
 
-
 @NgModule({
   declarations: [
     PasswordRepeatDirective,

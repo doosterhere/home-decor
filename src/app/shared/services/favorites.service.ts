@@ -5,8 +5,6 @@ import {HttpClient} from "@angular/common/http";
 import {FavoritesType} from "../../../types/favorites.type";
 import {DefaultResponseType} from "../../../types/default-response.type";
 import {AuthService} from "../../core/auth/auth.service";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {ProductType} from "../../../types/product.type";
 
 @Injectable({
   providedIn: 'root'

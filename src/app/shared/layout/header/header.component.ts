@@ -4,7 +4,6 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {Router} from "@angular/router";
 import {CategoryWithTypesType} from "../../../../types/category-with-types.type";
 import {CartService} from "../../services/cart.service";
-import {Subject} from "rxjs";
 import {DefaultResponseType} from "../../../../types/default-response.type";
 
 @Component({

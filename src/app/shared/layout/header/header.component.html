@@ -100,7 +100,15 @@
           </nav>
         </div>
         <div class="header__bottom-search">
-          <input type="text" placeholder="Начните искать">
+          <input type="text" placeholder="Начните искать" [formControl]="searchField">
+
+          <div class="search-result" *ngIf="showedSearchResult && searchResult && searchResult.length">
+            <div class="search-result__item" *ngFor="let item of searchResult" (click)="foundProductClick(item.url)">
+              <div class="search-result__item-image"
+                   style="background-image: url('{{serverStaticPath + item.image}}')"></div>
+              <div class="search-result__item-name">{{item.name}}</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

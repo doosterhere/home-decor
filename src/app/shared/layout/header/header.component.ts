@@ -1,10 +1,15 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, HostListener, Input, OnInit} from '@angular/core';
 import {AuthService} from "../../../core/auth/auth.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Router} from "@angular/router";
 import {CategoryWithTypesType} from "../../../../types/category-with-types.type";
 import {CartService} from "../../services/cart.service";
 import {DefaultResponseType} from "../../../../types/default-response.type";
+import {ProductService} from "../../services/product.service";
+import {ProductType} from "../../../../types/product.type";
+import {environment} from "../../../../environments/environment";
+import {FormControl} from "@angular/forms";
+import {debounceTime} from "rxjs";
 
 @Component({
   selector: 'app-header',
@@ -15,11 +20,16 @@ export class HeaderComponent implements OnInit {
   @Input() categories: CategoryWithTypesType[] = [];
   isLogged: boolean = false;
   count: number = 0;
+  searchField = new FormControl();
+  searchResult: ProductType[] = [];
+  serverStaticPath = environment.serverStaticPath;
+  showedSearchResult: boolean = false;
 
   constructor(private authService: AuthService,
               private _snackBar: MatSnackBar,
               private router: Router,
-              private cartService: CartService) {
+              private cartService: CartService,
+              private productService: ProductService) {
     this.isLogged = this.authService.isLogged;
   }
 
@@ -39,6 +49,21 @@ export class HeaderComponent implements OnInit {
     this.cartService.count$.subscribe(count => {
       this.count = count;
     });
+
+    this.searchField.valueChanges
+      .pipe(debounceTime(500))
+      .subscribe(value => {
+        if (value && value.length < 3) {
+          this.searchResult = [];
+        }
+
+        if (value && value.length > 2) {
+          this.productService.searchProducts(value).subscribe((data: ProductType[]) => {
+            this.searchResult = data;
+            this.showedSearchResult = true;
+          });
+        }
+      });
   }
 
   logout(): void {
@@ -57,5 +82,16 @@ export class HeaderComponent implements OnInit {
     this.authService.userId = null;
     this._snackBar.open('Вы вышли из системы');
     this.router.navigate(['/']);
+  }
+
+  foundProductClick(itemUrl: string): void {
+    this.router.navigate(['product/' + itemUrl]);
+    this.searchField.setValue('');
+    this.searchResult = [];
+  }
+
+  @HostListener('document:click', ['$event'])
+  click(event: Event): void {
+    this.showedSearchResult = !(this.showedSearchResult && (event.target as HTMLElement).className.indexOf('search-result') === -1);
   }
 }

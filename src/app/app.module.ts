@@ -14,6 +14,7 @@ import {SharedModule} from "./shared/shared.module";
 import {RouterModule} from "@angular/router";
 import {CarouselModule} from "ngx-owl-carousel-o";
 import {AuthInterceptor} from "./core/auth/auth.interceptor";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -32,6 +33,8 @@ import {AuthInterceptor} from "./core/auth/auth.interceptor";
     CarouselModule,
     BrowserAnimationsModule,
     SharedModule,
+    FormsModule,
+    ReactiveFormsModule,
     AppRoutingModule
   ],
   providers: [

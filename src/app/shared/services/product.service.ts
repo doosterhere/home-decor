@@ -26,4 +26,8 @@ export class ProductService {
   getProduct(url: string): Observable<ProductType> {
     return this.httpClient.get<ProductType>(environment.api + 'products/' + url);
   }
+
+  searchProducts(searchPhrase: string): Observable<ProductType[]> {
+    return this.httpClient.get<ProductType[]>(environment.api + 'products/search?query=' + searchPhrase);
+  }
 }

@@ -1,0 +1,115 @@
+@import "../../../../assets/styles/variables";
+@import "../../../../assets/styles/personal";
+
+.orders {
+  padding-top: 50px;
+  padding-bottom: 156px;
+
+  .container {
+    font-size: 16px;
+
+    .orders__title {
+      margin-bottom: 14px;
+      font-family: 'Montserrat', sans-serif;
+      font-style: normal;
+      font-weight: 500;
+      color: $color-text-secondary;
+    }
+
+    .orders__title-additional {
+      margin-bottom: 67px;
+      color: $color-text-secondary;
+    }
+
+    .orders__orders-is-empty-info {
+      margin-top: 20px;
+      margin-bottom: 100px;
+
+      div {
+        font-size: 16px;
+      }
+
+      .button {
+        width: 255px;
+        margin-top: 10px;
+      }
+    }
+
+    .orders__list {
+      .orders__list-item {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        padding-bottom: 46px;
+        margin-bottom: 47px;
+        border-bottom: 1px solid $color-secondary-04;
+
+        &:last-child {
+          padding-bottom: 0;
+          margin-bottom: 0;
+          border-bottom: 0;
+        }
+
+        .orders__list-item-number {
+          width: 297px;
+          margin-right: 20px;
+          font-size: 20px;
+          text-decoration-line: underline;
+          color: $color-blackish;
+        }
+
+        .orders__list-item-products {
+          width: 509px;
+          margin-right: 20px;
+          color: $color-text-gray;
+
+          .orders__list-item-products-count {
+            margin-bottom: 12px;
+          }
+
+          .orders__list-item-products-list {
+            .orders__list-item-products-list-row {
+              padding-left: 8px;
+              display: flex;
+              align-items: baseline;
+              gap: 10px;
+              margin-bottom: 3px;
+
+              &:last-child {
+                margin-bottom: 0;
+              }
+
+              div:first-child {
+                font-weight: 500;
+              }
+
+              div:nth-child(2) {
+                width: 211px;
+              }
+            }
+          }
+        }
+
+        .orders__list-item-status {
+          padding: 8px 24px;
+          text-align: center;
+          border-radius: 50px;
+          border: 1px solid $color-button-default;
+          box-sizing: border-box;
+          background-color: transparent;
+          color: $color-button-default;
+        }
+
+        .orders__list-item-price {
+          width: 186px;
+          text-align: right;
+          font-family: 'Montserrat', sans-serif;
+          font-style: normal;
+          font-weight: 600;
+          font-size: 22px;
+          color: $color-text-secondary;
+        }
+      }
+    }
+  }
+}

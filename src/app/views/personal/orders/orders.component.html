@@ -1,1 +1,40 @@
-<p>orders works!</p>
+<div class="orders">
+  <div class="container">
+    <div class="personal__title">Личный кабинет</div>
+    <div class="personal-pages-selector">
+      <div class="personal_page" routerLink="/profile">Личные данные</div>
+      <div class="personal_page active">Ваши заказы</div>
+    </div>
+
+    <div class="orders__title" *ngIf="orders && orders.length">Ваши заказы</div>
+    <div class="orders__title-additional" *ngIf="orders && orders.length">
+      Здесь отображается история ваших заказов.
+    </div>
+
+    <div class="orders__orders-is-empty-info" *ngIf="!orders || orders.length === 0">
+      <div>У вас ещё нет заказов</div>
+      <button class="button" routerLink="/catalog">Перейти в каталог</button>
+    </div>
+
+    <div class="orders__list" *ngIf="orders && orders.length">
+      <div class="orders__list-item" *ngFor="let order of orders; let i = index">
+        <div class="orders__list-item-number">Заказ №{{i + 1}}</div>
+        <div class="orders__list-item-products" *ngIf="order.items && order.items.length">
+          <div class="orders__list-item-products-count">Кол-во товаров: {{order.items.length}}</div>
+          <div class="orders__list-item-products-list">
+            <div class="orders__list-item-products-list-row" *ngFor="let item of order.items">
+              <div>&#183;</div>
+              <div>{{item.name}}</div>
+              <div>{{item.quantity}} шт.</div>
+            </div>
+          </div>
+        </div>
+        <div class="orders__list-item-status" *ngIf="order.statusAndColor"
+             style="border-color: {{order.statusAndColor.color}}; color: {{order.statusAndColor.color}}">
+          {{order.statusAndColor.name}}
+        </div>
+        <div class="orders__list-item-price">{{order.totalAmount}} BYN</div>
+      </div>
+    </div>
+  </div>
+</div>

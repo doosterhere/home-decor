@@ -6,7 +6,6 @@ import {FavoritesType} from "../../../types/favorites.type";
 import {FavoritesService} from "../services/favorites.service";
 
 export class FavoritesUtil {
-
   static updateFavorites(authService: AuthService, favoriteService: FavoritesService, product: ProductType, _snackBar: MatSnackBar): void {
     if (!authService.isLogged) {
       _snackBar.open('Для добавления в избранное необходимо авторизоваться');

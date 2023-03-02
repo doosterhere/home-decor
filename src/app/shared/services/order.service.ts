@@ -12,6 +12,10 @@ export class OrderService {
   constructor(private httpClient: HttpClient) {
   }
 
+  getOrders(): Observable<OrderType[] | DefaultResponseType> {
+    return this.httpClient.get<OrderType[] | DefaultResponseType>(environment.api + 'orders');
+  }
+
   createOrder(params: OrderType): Observable<OrderType | DefaultResponseType> {
     return this.httpClient.post<OrderType | DefaultResponseType>(environment.api + 'orders', params, {withCredentials: true});
   }

@@ -34,6 +34,21 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.searchField.valueChanges
+      .pipe(debounceTime(500))
+      .subscribe(value => {
+        if (value && value.length < 3) {
+          this.searchResult = [];
+        }
+
+        if (value && value.length > 2) {
+          this.productService.searchProducts(value).subscribe((data: ProductType[]) => {
+            this.searchResult = data;
+            this.showedSearchResult = true;
+          });
+        }
+      });
+
     this.authService.isLogged$.subscribe((isLogged: boolean) => {
       this.isLogged = isLogged;
     });
@@ -49,21 +64,6 @@ export class HeaderComponent implements OnInit {
     this.cartService.count$.subscribe(count => {
       this.count = count;
     });
-
-    this.searchField.valueChanges
-      .pipe(debounceTime(500))
-      .subscribe(value => {
-        if (value && value.length < 3) {
-          this.searchResult = [];
-        }
-
-        if (value && value.length > 2) {
-          this.productService.searchProducts(value).subscribe((data: ProductType[]) => {
-            this.searchResult = data;
-            this.showedSearchResult = true;
-          });
-        }
-      });
   }
 
   logout(): void {

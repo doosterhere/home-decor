@@ -224,3 +224,7 @@ a.button {
 input[type='text']:disabled {
   border-color: $color-disabled;
 }
+
+.mat-mdc-progress-spinner {
+  --mdc-circular-progress-active-indicator-color: #6CAC72;
+}

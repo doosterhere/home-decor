@@ -1,0 +1,55 @@
+@import "../../../../assets/styles/variables";
+
+.favorites__product {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .favorites__product-image {
+    width: 100px;
+    height: 100px;
+    background-position: center;
+    background-size: cover;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .favorites__product-name {
+    margin-left: 24px;
+    width: 567px;
+    font-size: 20px;
+    color: $color-text-secondary;
+  }
+
+  .favorites__product-price {
+    margin-left: 20px;
+    margin-right: 90px;
+    width: 100px;
+    font-family: 'Montserrat', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 22px;
+    color: $color-text-secondary;
+  }
+
+  .favorites__product-action {
+    width: 283px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 20px;
+
+    button {
+      width: 160px;
+    }
+  }
+
+  .favorites__product-remove {
+    margin-left: 61px;
+    cursor: pointer;
+
+    &:hover svg line {
+      stroke: $color-button-hover;
+    }
+  }
+}

@@ -92,6 +92,9 @@ export class HeaderComponent implements OnInit {
 
   @HostListener('document:click', ['$event'])
   click(event: Event): void {
-    this.showedSearchResult = !(this.showedSearchResult && (event.target as HTMLElement).className.indexOf('search-result') === -1);
+    const target: HTMLElement = event.target as HTMLElement;
+
+    this.showedSearchResult = target.hasAttribute('placeholder') &&
+      target.attributes.getNamedItem('placeholder')?.value === 'Начните искать';
   }
 }

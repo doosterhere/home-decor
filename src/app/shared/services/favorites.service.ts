@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Observable} from "rxjs";
+import {Observable, Subject} from "rxjs";
 import {environment} from "../../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {FavoritesType} from "../../../types/favorites.type";
@@ -10,6 +10,7 @@ import {AuthService} from "../../core/auth/auth.service";
   providedIn: 'root'
 })
 export class FavoritesService {
+  isListOfFavoritesUpdated$: Subject<string> = new Subject<string>();
 
   constructor(private httpClient: HttpClient,
               private authService: AuthService) {

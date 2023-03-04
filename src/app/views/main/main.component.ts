@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ProductService} from "../../shared/services/product.service";
 import {ProductType} from "../../../types/product.type";
 import {OwlOptions} from "ngx-owl-carousel-o";
+import {config} from "../../shared/config/config";
 
 @Component({
   selector: 'app-main',
@@ -94,6 +95,7 @@ export class MainComponent implements OnInit {
       text: 'Хочу поблагодарить консультанта Ирину за помощь в выборе цветка для моей жены. Я ещё никогда не видел такого трепетного отношения к весьма непростому клиенту, которому сложно угодить! Сервис – огонь!'
     },
   ]
+  deliveryCost: number = config.deliveryCost;
 
   constructor(private productService: ProductService) {
   }

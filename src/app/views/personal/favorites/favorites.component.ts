@@ -3,7 +3,6 @@ import {FavoritesService} from "../../../shared/services/favorites.service";
 import {FavoritesType} from "../../../../types/favorites.type";
 import {DefaultResponseType} from "../../../../types/default-response.type";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {environment} from "../../../../environments/environment";
 
 @Component({
   selector: 'app-favorites',
@@ -12,7 +11,6 @@ import {environment} from "../../../../environments/environment";
 })
 export class FavoritesComponent implements OnInit {
   products: FavoritesType[] = [];
-  serverStaticPath: string = environment.serverStaticPath;
 
   constructor(private favoriteService: FavoritesService,
               private _snackBar: MatSnackBar) {
@@ -26,19 +24,11 @@ export class FavoritesComponent implements OnInit {
         throw new Error(message);
       }
 
-      this.products = data as FavoritesType[];
+      this.products = (data as FavoritesType[]);
     });
-  }
 
-  removeFromFavorites(productId: string): void {
-    this.favoriteService.removeFromFavorites(productId).subscribe((data: DefaultResponseType) => {
-      if (data.error) {
-        this._snackBar.open(data.message);
-        throw new Error(data.message);
-      }
-
-      this.products = this.products.filter(item => item.id !== productId);
-      this._snackBar.open(data.message);
+    this.favoriteService.isListOfFavoritesUpdated$.subscribe((id: string) => {
+      this.products = this.products.filter(item => item.id != id);
     });
   }
 }

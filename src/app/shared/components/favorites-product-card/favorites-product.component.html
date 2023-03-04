@@ -1,0 +1,21 @@
+<div class="favorites__product" *ngIf="product">
+  <div class="favorites__product-image"
+       routerLink="/product/{{product.url}}"
+       style="background-image: url('{{serverStaticPath + product.image}}')"></div>
+  <div class="favorites__product-name">{{product.name}}</div>
+  <div class="favorites__product-price">{{product.price}} BYN</div>
+  <div class="favorites__product-action">
+    <button class="button" (click)="addToCart()" *ngIf="!countInCart">В корзину</button>
+    <count-selector [count]="count" (onCountChange)="updateCount($event)" *ngIf="countInCart"></count-selector>
+    <button class="button button_transparent button_in-cart" (click)="removeFromCart()" *ngIf="countInCart">
+      <span>В корзине</span>
+      <span>Удалить</span>
+    </button>
+  </div>
+  <div class="favorites__product-remove" (click)="removeFromFavorites()">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <line x1="0.935622" y1="0.649902" x2="12.9564" y2="12.6707" stroke="#A8ABA7" stroke-linecap="round"/>
+      <line x1="12.9238" y1="0.629958" x2="0.903013" y2="12.6508" stroke="#A8ABA7" stroke-linecap="round"/>
+    </svg>
+  </div>
+</div>

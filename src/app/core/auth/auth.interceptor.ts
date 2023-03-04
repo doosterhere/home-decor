@@ -15,7 +15,7 @@ export class AuthInterceptor implements HttpInterceptor {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    this.loaderService.show();
+    //this.loaderService.show();
     const tokens = this.authService.getTokens();
 
     if (tokens && tokens.accessToken) {
@@ -32,13 +32,17 @@ export class AuthInterceptor implements HttpInterceptor {
 
             return throwError(() => error);
           }),
-          finalize(() => this.loaderService.hide())
+          finalize(() => {
+            // this.loaderService.hide()
+          })
         );
     }
 
     return next.handle(req)
       .pipe(
-        finalize(() => this.loaderService.hide())
+        finalize(() => {
+          // this.loaderService.hide()
+        })
       );
   }
 

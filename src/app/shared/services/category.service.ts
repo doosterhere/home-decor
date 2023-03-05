@@ -4,6 +4,7 @@ import {map, Observable} from "rxjs";
 import {environment} from "../../../environments/environment";
 import {TypeType} from "../../../types/type.type";
 import {CategoryWithTypesType} from "../../../types/category-with-types.type";
+import {CategoryType} from "../../../types/category.type";
 
 @Injectable({
   providedIn: 'root'
@@ -13,9 +14,9 @@ export class CategoryService {
   constructor(private httpClient: HttpClient) {
   }
 
-  // getCategories(): Observable<CategoryType[]> {
-  //   return this.httpClient.get<CategoryType[]>(environment.api + 'categories');
-  // }
+  getCategories(): Observable<CategoryType[]> {
+    return this.httpClient.get<CategoryType[]>(environment.api + 'categories');
+  }
 
   getCategoriesWithTypes(): Observable<CategoryWithTypesType[]> {
     return this.httpClient.get<TypeType[]>(environment.api + 'types')

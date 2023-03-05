@@ -95,7 +95,7 @@
         </div>
 
         <div class="detail__info-actions">
-          <button class="button button_transparent button_with-icon" (click)="updateFavorites()">
+          <button class="button button_transparent button_with-icon" (click)="updateFavorites()" *ngIf="isLogged">
 
             <svg width="17" height="15" viewBox="0 0 17 15" fill="none" xmlns="http://www.w3.org/2000/svg"
                  *ngIf="!product.inFavorites">
@@ -147,7 +147,7 @@
       <div class="carousel__items">
         <owl-carousel-o [options]="customOptions" #owlCar>
           <ng-template carouselSlide *ngFor="let product of recommendedProducts">
-            <product-card [product]="product"></product-card>
+            <product-card [product]="product" [isLogged]="isLogged"></product-card>
           </ng-template>
         </owl-carousel-o>
       </div>

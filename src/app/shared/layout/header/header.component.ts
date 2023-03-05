@@ -1,4 +1,4 @@
-import {Component, HostListener, Input, OnInit} from '@angular/core';
+import {Component, HostListener, Input, OnDestroy, OnInit} from '@angular/core';
 import {AuthService} from "../../../core/auth/auth.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Router} from "@angular/router";
@@ -9,14 +9,14 @@ import {ProductService} from "../../services/product.service";
 import {ProductType} from "../../../../types/product.type";
 import {environment} from "../../../../environments/environment";
 import {FormControl} from "@angular/forms";
-import {debounceTime} from "rxjs";
+import {debounceTime, Subscription} from "rxjs";
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
   @Input() categories: CategoryWithTypesType[] = [];
   isLogged: boolean = false;
   count: number = 0;
@@ -24,6 +24,11 @@ export class HeaderComponent implements OnInit {
   searchResult: ProductType[] = [];
   serverStaticPath = environment.serverStaticPath;
   showedSearchResult: boolean = false;
+  searchFieldValueChangesSubscription: Subscription | null = null;
+  productServiceSearchProductsSubscription: Subscription | null = null;
+  authServiceIsLogged$Subscription: Subscription | null = null;
+  cartServiceGetCartCountSubscription: Subscription | null = null;
+  authServiceLogoutSubscription: Subscription | null = null;
 
   constructor(private authService: AuthService,
               private _snackBar: MatSnackBar,
@@ -34,7 +39,7 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.searchField.valueChanges
+    this.searchFieldValueChangesSubscription = this.searchField.valueChanges
       .pipe(debounceTime(500))
       .subscribe(value => {
         if (value && value.length < 3) {
@@ -42,39 +47,51 @@ export class HeaderComponent implements OnInit {
         }
 
         if (value && value.length > 2) {
-          this.productService.searchProducts(value).subscribe((data: ProductType[]) => {
-            this.searchResult = data;
-            this.showedSearchResult = true;
-          });
+          this.productServiceSearchProductsSubscription = this.productService.searchProducts(value)
+            .subscribe((data: ProductType[]) => {
+              this.searchResult = data;
+              this.showedSearchResult = true;
+            });
         }
       });
 
-    this.authService.isLogged$.subscribe((isLogged: boolean) => {
-      this.isLogged = isLogged;
-    });
+    this.authServiceIsLogged$Subscription = this.authService.isLogged$
+      .subscribe((isLogged: boolean) => {
+        this.isLogged = isLogged;
+      });
 
-    this.cartService.getCartCount().subscribe((data: { count: number } | DefaultResponseType) => {
-      if ((data as DefaultResponseType).error) {
-        throw new Error((data as DefaultResponseType).message);
-      }
+    this.cartServiceGetCartCountSubscription = this.cartService.getCartCount()
+      .subscribe((data: { count: number } | DefaultResponseType) => {
+        if ((data as DefaultResponseType).error) {
+          throw new Error((data as DefaultResponseType).message);
+        }
 
-      this.count = (data as { count: number }).count;
-    });
+        this.count = (data as { count: number }).count;
+      });
 
     this.cartService.count$.subscribe(count => {
       this.count = count;
     });
   }
 
+  ngOnDestroy(): void {
+    this.searchFieldValueChangesSubscription?.unsubscribe();
+    this.productServiceSearchProductsSubscription?.unsubscribe();
+    this.authServiceIsLogged$Subscription?.unsubscribe();
+    this.cartServiceGetCartCountSubscription?.unsubscribe();
+    this.authServiceLogoutSubscription?.unsubscribe();
+  }
+
   logout(): void {
-    this.authService.logout().subscribe({
-      next: () => {
-        this.doLogout();
-      },
-      error: () => {
-        this.doLogout();
-      }
-    });
+    this.authServiceLogoutSubscription = this.authService.logout()
+      .subscribe({
+        next: () => {
+          this.doLogout();
+        },
+        error: () => {
+          this.doLogout();
+        }
+      });
   }
 
   doLogout(): void {

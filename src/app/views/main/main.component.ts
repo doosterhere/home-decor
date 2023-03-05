@@ -1,16 +1,19 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ProductService} from "../../shared/services/product.service";
 import {ProductType} from "../../../types/product.type";
 import {OwlOptions} from "ngx-owl-carousel-o";
 import {config} from "../../shared/config/config";
+import {Subscription} from "rxjs";
+import {AuthService} from "../../core/auth/auth.service";
 
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.scss']
 })
-export class MainComponent implements OnInit {
+export class MainComponent implements OnInit, OnDestroy {
   products: ProductType[] = [];
+  isLogged: boolean = false;
   customOptions: OwlOptions = {
     loop: true,
     mouseDrag: false,
@@ -96,16 +99,30 @@ export class MainComponent implements OnInit {
     },
   ]
   deliveryCost: number = config.deliveryCost;
+  productServiceGetBestProductsSubscription: Subscription | null = null;
+  authServiceIsLogged$Subscription: Subscription | null = null;
 
-  constructor(private productService: ProductService) {
+  constructor(private productService: ProductService,
+              private authService: AuthService) {
+    this.isLogged = this.authService.isLogged;
   }
 
   ngOnInit(): void {
-    this.productService.getBestProducts()
+    this.productServiceGetBestProductsSubscription = this.productService.getBestProducts()
       .subscribe((data: ProductType[]) => {
         if (data.length) {
           this.products = data;
         }
       });
+
+    this.authServiceIsLogged$Subscription = this.authService.isLogged$
+      .subscribe((isLogged: boolean) => {
+        this.isLogged = isLogged;
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.productServiceGetBestProductsSubscription?.unsubscribe();
+    this.authServiceIsLogged$Subscription?.unsubscribe();
   }
 }

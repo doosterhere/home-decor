@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnDestroy} from '@angular/core';
 import {FormBuilder, Validators} from "@angular/forms";
 import {AuthService} from "../../../core/auth/auth.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
@@ -6,13 +6,16 @@ import {Router} from "@angular/router";
 import {HttpErrorResponse} from "@angular/common/http";
 import {DefaultResponseType} from "../../../../types/default-response.type";
 import {LoginResponseType} from "../../../../types/login-response.type";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss']
 })
-export class SignupComponent {
+export class SignupComponent implements OnDestroy {
+  authServiceSignupSubscription: Subscription | null = null;
+
   signupForm = this.fb.group({
     email: ['', [Validators.email, Validators.required]],
     password: ['', [Validators.required, Validators.pattern(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/)]],
@@ -26,10 +29,15 @@ export class SignupComponent {
               private router: Router) {
   }
 
+  ngOnDestroy(): void {
+    this.authServiceSignupSubscription?.unsubscribe();
+  }
+
   signup(): void {
     if (this.signupForm.valid && this.signupForm.value.email &&
       this.signupForm.value.password && this.signupForm.value.passwordRepeat && this.signupForm.value.agree) {
-      this.authService.signup(this.signupForm.value.email, this.signupForm.value.password, this.signupForm.value.passwordRepeat)
+      this.authServiceSignupSubscription = this.authService
+        .signup(this.signupForm.value.email, this.signupForm.value.password, this.signupForm.value.passwordRepeat)
         .subscribe({
           next: (data: DefaultResponseType | LoginResponseType) => {
             let error: string | null = null;

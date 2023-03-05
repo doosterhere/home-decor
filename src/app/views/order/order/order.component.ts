@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {CartService} from "../../../shared/services/cart.service";
 import {DefaultResponseType} from "../../../../types/default-response.type";
 import {CartType} from "../../../../types/cart.type";
@@ -17,13 +17,14 @@ import {UserService} from "../../../shared/services/user.service";
 import {UserInfoType} from "../../../../types/user-info.type";
 import {AuthService} from "../../../core/auth/auth.service";
 import {SnackbarErrorUtil} from "../../../shared/utils/snackbar-error.util";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'order',
   templateUrl: './order.component.html',
   styleUrls: ['./order.component.scss']
 })
-export class OrderComponent implements OnInit {
+export class OrderComponent implements OnInit, OnDestroy {
   cart: CartType | null = null;
   totalAmount: number = 0;
   totalCount: number = 0;
@@ -46,6 +47,9 @@ export class OrderComponent implements OnInit {
   });
   @ViewChild('popup') popup!: TemplateRef<ElementRef>;
   dialogRef: MatDialogRef<any> | null = null;
+  cartServiceGetCartSubscription: Subscription | null = null;
+  userServiceGetUserInfoSubscription: Subscription | null = null;
+  orderServiceCreateOrderSubscription: Subscription | null = null;
 
   constructor(private cartService: CartService,
               private router: Router,
@@ -59,48 +63,56 @@ export class OrderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.cartService.getCart().subscribe((data: DefaultResponseType | CartType) => {
-      if ((data as DefaultResponseType).error) {
-        throw new Error((data as DefaultResponseType).message);
-      }
+    this.cartServiceGetCartSubscription = this.cartService.getCart()
+      .subscribe((data: DefaultResponseType | CartType) => {
+        if ((data as DefaultResponseType).error) {
+          throw new Error((data as DefaultResponseType).message);
+        }
 
-      this.cart = data as CartType;
-      if (!this.cart || (this.cart && !this.cart.items.length)) {
-        this._snackBar.open('Корзина пустая');
-        this.router.navigate(['/']);
-        return;
-      }
+        this.cart = data as CartType;
+        if (!this.cart || (this.cart && !this.cart.items.length)) {
+          this._snackBar.open('Корзина пустая');
+          this.router.navigate(['/']);
+          return;
+        }
 
-      [this.totalAmount, this.totalCount] = CartUtil.calculateTotal(this.cart);
-    });
+        [this.totalAmount, this.totalCount] = CartUtil.calculateTotal(this.cart);
+      });
 
     if (this.authService.isLogged) {
-      this.userService.getUserInfo().subscribe((data: UserInfoType | DefaultResponseType) => {
-        SnackbarErrorUtil.showErrorMessageIfErrorAndThrowError(data as DefaultResponseType, this._snackBar);
+      this.userServiceGetUserInfoSubscription = this.userService.getUserInfo()
+        .subscribe((data: UserInfoType | DefaultResponseType) => {
+          SnackbarErrorUtil.showErrorMessageIfErrorAndThrowError(data as DefaultResponseType, this._snackBar);
 
-        const userInfo = data as UserInfoType;
-        const paramToUpdate = {
-          firstName: userInfo.firstName ? userInfo.firstName : '',
-          lastName: userInfo.lastName ? userInfo.lastName : '',
-          fatherName: userInfo.fatherName ? userInfo.fatherName : '',
-          phone: userInfo.phone ? userInfo.phone : '',
-          paymentType: userInfo.paymentType ? userInfo.paymentType : PaymentType.cashToCourier,
-          email: userInfo.email ? userInfo.email : '',
-          street: userInfo.street ? userInfo.street : '',
-          house: userInfo.house ? userInfo.house : '',
-          entrance: userInfo.entrance ? userInfo.entrance : '',
-          apartment: userInfo.apartment ? userInfo.apartment : '',
-          comment: ''
-        }
+          const userInfo = data as UserInfoType;
+          const paramToUpdate = {
+            firstName: userInfo.firstName ? userInfo.firstName : '',
+            lastName: userInfo.lastName ? userInfo.lastName : '',
+            fatherName: userInfo.fatherName ? userInfo.fatherName : '',
+            phone: userInfo.phone ? userInfo.phone : '',
+            paymentType: userInfo.paymentType ? userInfo.paymentType : PaymentType.cashToCourier,
+            email: userInfo.email ? userInfo.email : '',
+            street: userInfo.street ? userInfo.street : '',
+            house: userInfo.house ? userInfo.house : '',
+            entrance: userInfo.entrance ? userInfo.entrance : '',
+            apartment: userInfo.apartment ? userInfo.apartment : '',
+            comment: ''
+          }
 
-        this.orderForm.setValue(paramToUpdate);
+          this.orderForm.setValue(paramToUpdate);
 
-        if (userInfo.deliveryType) {
-          this.deliveryType = userInfo.deliveryType;
-          this.changeDeliveryType(this.deliveryType);
-        }
-      });
+          if (userInfo.deliveryType) {
+            this.deliveryType = userInfo.deliveryType;
+            this.changeDeliveryType(this.deliveryType);
+          }
+        });
     }
+  }
+
+  ngOnDestroy(): void {
+    this.cartServiceGetCartSubscription?.unsubscribe();
+    this.userServiceGetUserInfoSubscription?.unsubscribe();
+    this.orderServiceCreateOrderSubscription?.unsubscribe();
   }
 
   changeDeliveryType(deliveryType: DeliveryType): void {
@@ -169,7 +181,7 @@ export class OrderComponent implements OnInit {
         paramsObject.comment = this.orderForm.value.comment;
       }
 
-      this.orderService.createOrder(paramsObject)
+      this.orderServiceCreateOrderSubscription = this.orderService.createOrder(paramsObject)
         .subscribe({
           next: (data: DefaultResponseType | OrderType) => {
             SnackbarErrorUtil.showErrorMessageIfErrorAndThrowError(data as DefaultResponseType, this._snackBar);

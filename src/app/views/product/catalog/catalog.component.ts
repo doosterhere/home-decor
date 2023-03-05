@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ProductType} from "../../../../types/product.type";
 import {ProductService} from "../../../shared/services/product.service";
 import {CategoryService} from "../../../shared/services/category.service";
@@ -7,7 +7,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {ActiveParamsType} from "../../../../types/active-params.type";
 import {ActiveParamsUtil} from "../../../shared/utils/active-params.util";
 import {AppliedFilterType} from "../../../../types/applied-filter.type";
-import {debounceTime} from "rxjs";
+import {debounceTime, Subscription} from "rxjs";
 import {CartType} from "../../../../types/cart.type";
 import {CartService} from "../../../shared/services/cart.service";
 import {DefaultResponseType} from "../../../../types/default-response.type";
@@ -22,7 +22,7 @@ import {SnackbarErrorUtil} from "../../../shared/utils/snackbar-error.util";
   templateUrl: './catalog.component.html',
   styleUrls: ['./catalog.component.scss']
 })
-export class CatalogComponent implements OnInit {
+export class CatalogComponent implements OnInit, OnDestroy {
   products: ProductType[] = [];
   favoriteProducts: FavoritesType[] | null = null;
   requestSuccess: boolean = false;
@@ -39,6 +39,12 @@ export class CatalogComponent implements OnInit {
   pages: number[] = [];
   cart: CartType | null = null;
   isLogged: boolean = false;
+  cartServiceGetCartSubscription: Subscription | null = null;
+  favoritesServiceGetFavoritesSubscription: Subscription | null = null;
+  authServiceIsLogged$Subscription: Subscription | null = null;
+  categoryServiceGetCategoriesWithTypesSubscription: Subscription | null = null;
+  activatedRouteQueryParamsSubscription: Subscription | null = null;
+  productServiceGetProductsSubscription: Subscription | null = null;
 
   constructor(private productService: ProductService,
               private categoryService: CategoryService,
@@ -52,44 +58,56 @@ export class CatalogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.cartService.getCart().subscribe((data: CartType | DefaultResponseType) => {
-      SnackbarErrorUtil.showErrorMessageIfErrorAndThrowError(data as DefaultResponseType, this._snackBar);
-      this.cart = data as CartType;
+    this.cartServiceGetCartSubscription = this.cartService.getCart()
+      .subscribe((data: CartType | DefaultResponseType) => {
+        SnackbarErrorUtil.showErrorMessageIfErrorAndThrowError(data as DefaultResponseType, this._snackBar);
+        this.cart = data as CartType;
 
-      if (this.authService.isLogged) {
-        this.favoritesService.getFavorites().subscribe({
-          next: (data: FavoritesType[] | DefaultResponseType) => {
-            if ((data as DefaultResponseType).error) {
-              const message = (data as DefaultResponseType).message;
-              this.processCatalog();
-              throw new Error(message);
-            }
+        if (this.authService.isLogged) {
+          this.favoritesServiceGetFavoritesSubscription = this.favoritesService.getFavorites()
+            .subscribe({
+              next: (data: FavoritesType[] | DefaultResponseType) => {
+                if ((data as DefaultResponseType).error) {
+                  const message = (data as DefaultResponseType).message;
+                  this.processCatalog();
+                  throw new Error(message);
+                }
 
-            this.favoriteProducts = data as FavoritesType[];
-            this.processCatalog();
-          },
-          error: (error) => {
-            this.processCatalog();
-          },
-        });
-      }
+                this.favoriteProducts = data as FavoritesType[];
+                this.processCatalog();
+              },
+              error: (error) => {
+                this.processCatalog();
+              },
+            });
+        }
 
-      if (!this.authService.isLogged) {
-        this.processCatalog();
-      }
-    });
+        if (!this.authService.isLogged) {
+          this.processCatalog();
+        }
+      });
 
-    this.authService.isLogged$.subscribe((isLogged: boolean) => {
-      this.isLogged = isLogged;
-    });
+    this.authServiceIsLogged$Subscription = this.authService.isLogged$
+      .subscribe((isLogged: boolean) => {
+        this.isLogged = isLogged;
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.cartServiceGetCartSubscription?.unsubscribe();
+    this.favoritesServiceGetFavoritesSubscription?.unsubscribe();
+    this.authServiceIsLogged$Subscription?.unsubscribe();
+    this.categoryServiceGetCategoriesWithTypesSubscription?.unsubscribe();
+    this.activatedRouteQueryParamsSubscription?.unsubscribe();
+    this.productServiceGetProductsSubscription?.unsubscribe();
   }
 
   processCatalog(): void {
-    this.categoryService.getCategoriesWithTypes()
+    this.categoryServiceGetCategoriesWithTypesSubscription = this.categoryService.getCategoriesWithTypes()
       .subscribe(data => {
         this.categoriesWithTypes = data;
 
-        this.activatedRoute.queryParams
+        this.activatedRouteQueryParamsSubscription = this.activatedRoute.queryParams
           .pipe(
             debounceTime(500)
           )
@@ -139,47 +157,48 @@ export class CatalogComponent implements OnInit {
               });
             }
 
-            this.productService.getProducts(this.activeParams).subscribe({
-              next: (data) => {
-                this.pages = [];
-                for (let i = 1; i <= data.pages; i++) {
-                  this.pages.push(i);
-                }
-                this.requestSuccess = true;
+            this.productServiceGetProductsSubscription = this.productService.getProducts(this.activeParams)
+              .subscribe({
+                next: (data) => {
+                  this.pages = [];
+                  for (let i = 1; i <= data.pages; i++) {
+                    this.pages.push(i);
+                  }
+                  this.requestSuccess = true;
 
-                if (this.cart && this.cart.items.length > 0) {
-                  this.products = data.items.map(product => {
-                    if (this.cart) {
-                      const productInCart = this.cart.items.find(item => item.product.id === product.id);
-                      if (productInCart) {
-                        product.countInCart = productInCart.quantity;
+                  if (this.cart && this.cart.items.length > 0) {
+                    this.products = data.items.map(product => {
+                      if (this.cart) {
+                        const productInCart = this.cart.items.find(item => item.product.id === product.id);
+                        if (productInCart) {
+                          product.countInCart = productInCart.quantity;
+                        }
                       }
-                    }
 
-                    return product;
-                  });
+                      return product;
+                    });
+                  }
+
+                  if (!this.cart || this.cart.items.length === 0) {
+                    this.products = data.items;
+                  }
+
+                  if (this.favoriteProducts) {
+                    this.products = this.products.map(product => {
+                      if (this.favoriteProducts?.find(item => item.id === product.id)) {
+                        product.inFavorites = true;
+                      }
+
+                      return product;
+                    })
+                  }
+
+                },
+                error: (error) => {
+                  this.requestSuccess = false;
+                  throw new Error(error.message);
                 }
-
-                if (!this.cart || this.cart.items.length === 0) {
-                  this.products = data.items;
-                }
-
-                if (this.favoriteProducts) {
-                  this.products = this.products.map(product => {
-                    if (this.favoriteProducts?.find(item => item.id === product.id)) {
-                      product.inFavorites = true;
-                    }
-
-                    return product;
-                  })
-                }
-
-              },
-              error: (error) => {
-                this.requestSuccess = false;
-                throw new Error(error.message);
-              }
-            });
+              });
           });
       });
   }

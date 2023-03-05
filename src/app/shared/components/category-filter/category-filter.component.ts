@@ -3,6 +3,7 @@ import {CategoryWithTypesType} from "../../../../types/category-with-types.type"
 import {ActivatedRoute, Router} from "@angular/router";
 import {ActiveParamsType} from "../../../../types/active-params.type";
 import {ActiveParamsUtil} from "../../utils/active-params.util";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'category-filter',
@@ -16,43 +17,49 @@ export class CategoryFilterComponent implements OnInit {
   activeParams: ActiveParamsType = {types: []};
   to: number | null = null;
   from: number | null = null;
+  activatedRouteQueryParamsSubscription: Subscription | null = null;
 
   constructor(private router: Router,
               private activatedRoute: ActivatedRoute) {
   }
 
   ngOnInit(): void {
-    this.activatedRoute.queryParams.subscribe(params => {
-      this.activeParams = ActiveParamsUtil.processParams(params);
+    this.activatedRouteQueryParamsSubscription = this.activatedRoute.queryParams
+      .subscribe(params => {
+        this.activeParams = ActiveParamsUtil.processParams(params);
 
-      if (this.type) {
-        if (this.type === 'height') {
-          if (this.activeParams.heightFrom || this.activeParams.heightTo) {
-            this.open = true
+        if (this.type) {
+          if (this.type === 'height') {
+            if (this.activeParams.heightFrom || this.activeParams.heightTo) {
+              this.open = true
+            }
+            this.from = this.activeParams.heightFrom ? +this.activeParams.heightFrom : null;
+            this.to = this.activeParams.heightTo ? +this.activeParams.heightTo : null;
           }
-          this.from = this.activeParams.heightFrom ? +this.activeParams.heightFrom : null;
-          this.to = this.activeParams.heightTo ? +this.activeParams.heightTo : null;
+
+          if (this.type === 'diameter') {
+            if (this.activeParams.diameterFrom || this.activeParams.diameterTo) {
+              this.open = true;
+            }
+            this.from = this.activeParams.diameterFrom ? +this.activeParams.diameterFrom : null;
+            this.to = this.activeParams.diameterTo ? +this.activeParams.diameterTo : null;
+          }
         }
 
-        if (this.type === 'diameter') {
-          if (this.activeParams.diameterFrom || this.activeParams.diameterTo) {
+        if (!this.type && params['types']) {
+          this.activeParams.types = Array.isArray(params['types']) ? params['types'] : [params['types']];
+
+          if (this.categoryWithTypes && this.categoryWithTypes.types &&
+            this.categoryWithTypes.types.length &&
+            this.categoryWithTypes.types.some(type => this.activeParams.types.find(item => type.url === item))) {
             this.open = true;
           }
-          this.from = this.activeParams.diameterFrom ? +this.activeParams.diameterFrom : null;
-          this.to = this.activeParams.diameterTo ? +this.activeParams.diameterTo : null;
         }
-      }
+      });
+  }
 
-      if (!this.type && params['types']) {
-        this.activeParams.types = Array.isArray(params['types']) ? params['types'] : [params['types']];
-
-        if (this.categoryWithTypes && this.categoryWithTypes.types &&
-          this.categoryWithTypes.types.length &&
-          this.categoryWithTypes.types.some(type => this.activeParams.types.find(item => type.url === item))) {
-          this.open = true;
-        }
-      }
-    });
+  ngOnDestroy(): void {
+    this.activatedRouteQueryParamsSubscription?.unsubscribe();
   }
 
   get title(): string {

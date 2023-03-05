@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {CategoryWithTypesType} from "../../../../types/category-with-types.type";
 
 @Component({
@@ -6,13 +6,10 @@ import {CategoryWithTypesType} from "../../../../types/category-with-types.type"
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss']
 })
-export class FooterComponent implements OnInit {
+export class FooterComponent {
   @Input() categories: CategoryWithTypesType[] = [];
 
   constructor() {
 
-  }
-
-  ngOnInit(): void {
   }
 }

@@ -104,7 +104,7 @@
           </nav>
         </div>
         <div class="header__bottom-search">
-          <input type="text" placeholder="Начните искать" [formControl]="searchField">
+          <input type="text" placeholder="Начните искать" [formControl]="searchField" id="search-input">
 
           <div class="search-result" *ngIf="showedSearchResult && searchResult && searchResult.length">
             <div class="search-result__item" *ngFor="let item of searchResult" (click)="foundProductClick(item.url)">

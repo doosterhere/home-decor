@@ -94,7 +94,7 @@ export class HeaderComponent implements OnInit {
   click(event: Event): void {
     const target: HTMLElement = event.target as HTMLElement;
 
-    this.showedSearchResult = target.hasAttribute('placeholder') &&
-      target.attributes.getNamedItem('placeholder')?.value === 'Начните искать';
+    this.showedSearchResult = target.hasAttribute('id') &&
+      target.attributes.getNamedItem('id')?.value === 'search-input';
   }
 }

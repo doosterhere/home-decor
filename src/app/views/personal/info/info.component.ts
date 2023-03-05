@@ -7,6 +7,7 @@ import {UserInfoType} from "../../../../types/user-info.type";
 import {DefaultResponseType} from "../../../../types/default-response.type";
 import {HttpErrorResponse} from "@angular/common/http";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {SnackbarErrorUtil} from "../../../shared/utils/snackbar-error.util";
 
 @Component({
   selector: 'app-info',
@@ -37,11 +38,7 @@ export class InfoComponent implements OnInit {
 
   ngOnInit(): void {
     this.userService.getUserInfo().subscribe((data: UserInfoType | DefaultResponseType) => {
-      if ((data as DefaultResponseType).error) {
-        const message = (data as DefaultResponseType).message;
-        this._snackBar.open(message);
-        throw new Error(message);
-      }
+      SnackbarErrorUtil.showErrorMessageIfErrorAndThrowError(data as DefaultResponseType, this._snackBar);
 
       const userInfo = data as UserInfoType;
       const paramToUpdate = {
@@ -112,11 +109,7 @@ export class InfoComponent implements OnInit {
 
       this.userService.updateUserInfo(paramObject).subscribe({
         next: (data: DefaultResponseType) => {
-          if (data.error) {
-            this._snackBar.open(data.message);
-            throw new Error(data.message);
-          }
-
+          SnackbarErrorUtil.showErrorMessageIfErrorAndThrowError(data, this._snackBar);
           this._snackBar.open(data.message);
           this.userInfoForm.markAsPristine();
         },

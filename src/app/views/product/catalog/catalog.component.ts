@@ -15,6 +15,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 import {FavoritesService} from "../../../shared/services/favorites.service";
 import {FavoritesType} from "../../../../types/favorites.type";
 import {AuthService} from "../../../core/auth/auth.service";
+import {SnackbarErrorUtil} from "../../../shared/utils/snackbar-error.util";
 
 @Component({
   selector: 'app-catalog',
@@ -37,6 +38,7 @@ export class CatalogComponent implements OnInit {
   ];
   pages: number[] = [];
   cart: CartType | null = null;
+  isLogged: boolean = false;
 
   constructor(private productService: ProductService,
               private categoryService: CategoryService,
@@ -46,16 +48,12 @@ export class CatalogComponent implements OnInit {
               private _snackBar: MatSnackBar,
               private favoritesService: FavoritesService,
               private authService: AuthService) {
+    this.isLogged = this.authService.isLogged;
   }
 
   ngOnInit(): void {
     this.cartService.getCart().subscribe((data: CartType | DefaultResponseType) => {
-      if ((data as DefaultResponseType).error) {
-        const message = (data as DefaultResponseType).message;
-        this._snackBar.open(message);
-        throw new Error(message);
-      }
-
+      SnackbarErrorUtil.showErrorMessageIfErrorAndThrowError(data as DefaultResponseType, this._snackBar);
       this.cart = data as CartType;
 
       if (this.authService.isLogged) {
@@ -79,7 +77,11 @@ export class CatalogComponent implements OnInit {
       if (!this.authService.isLogged) {
         this.processCatalog();
       }
-    })
+    });
+
+    this.authService.isLogged$.subscribe((isLogged: boolean) => {
+      this.isLogged = isLogged;
+    });
   }
 
   processCatalog(): void {

@@ -16,6 +16,7 @@ import {HttpErrorResponse} from "@angular/common/http";
 import {UserService} from "../../../shared/services/user.service";
 import {UserInfoType} from "../../../../types/user-info.type";
 import {AuthService} from "../../../core/auth/auth.service";
+import {SnackbarErrorUtil} from "../../../shared/utils/snackbar-error.util";
 
 @Component({
   selector: 'order',
@@ -75,11 +76,7 @@ export class OrderComponent implements OnInit {
 
     if (this.authService.isLogged) {
       this.userService.getUserInfo().subscribe((data: UserInfoType | DefaultResponseType) => {
-        if ((data as DefaultResponseType).error) {
-          const message = (data as DefaultResponseType).message;
-          this._snackBar.open(message);
-          throw new Error(message);
-        }
+        SnackbarErrorUtil.showErrorMessageIfErrorAndThrowError(data as DefaultResponseType, this._snackBar);
 
         const userInfo = data as UserInfoType;
         const paramToUpdate = {
@@ -175,11 +172,7 @@ export class OrderComponent implements OnInit {
       this.orderService.createOrder(paramsObject)
         .subscribe({
           next: (data: DefaultResponseType | OrderType) => {
-            if ((data as DefaultResponseType).error) {
-              const message = (data as DefaultResponseType).message;
-              this._snackBar.open(message);
-              throw new Error(message);
-            }
+            SnackbarErrorUtil.showErrorMessageIfErrorAndThrowError(data as DefaultResponseType, this._snackBar);
 
             this.dialogRef = this.dialog.open(this.popup);
             this.dialogRef.backdropClick().subscribe(() => {

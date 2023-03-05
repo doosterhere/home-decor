@@ -12,6 +12,7 @@ import {FavoritesService} from "../../../shared/services/favorites.service";
 import {FavoritesType} from "../../../../types/favorites.type";
 import {AuthService} from "../../../core/auth/auth.service";
 import {FavoritesUtil} from "../../../shared/utils/favorites.util";
+import {SnackbarErrorUtil} from "../../../shared/utils/snackbar-error.util";
 
 @Component({
   selector: 'app-detail',
@@ -64,11 +65,7 @@ export class DetailComponent implements OnInit {
           this.product = data;
 
           this.cartService.getCart().subscribe((cartData: CartType | DefaultResponseType) => {
-            if ((cartData as DefaultResponseType).error) {
-              const message = (cartData as DefaultResponseType).message;
-              this._snackBar.open(message);
-              throw new Error(message);
-            }
+            SnackbarErrorUtil.showErrorMessageIfErrorAndThrowError(cartData as DefaultResponseType, this._snackBar);
 
             if (cartData) {
               const productInCart = (cartData as CartType).items.find(item => item.product.id === this.product.id);
@@ -107,31 +104,6 @@ export class DetailComponent implements OnInit {
       });
   }
 
-  addToCart(): void {
-    this.cartService.updateCart(this.product.id, this.count).subscribe((data: CartType | DefaultResponseType) => {
-      if ((data as DefaultResponseType).error) {
-        const message = (data as DefaultResponseType).message;
-        this._snackBar.open(message);
-        throw new Error(message);
-      }
-
-      this.product.countInCart = this.count;
-    });
-  }
-
-  removeFromCart(): void {
-    this.cartService.updateCart(this.product.id, 0).subscribe((data: CartType | DefaultResponseType) => {
-      if ((data as DefaultResponseType).error) {
-        const message = (data as DefaultResponseType).message;
-        this._snackBar.open(message);
-        throw new Error(message);
-      }
-
-      this.product.countInCart = 0;
-      this.count = 1;
-    });
-  }
-
   updateCount(value: number): void {
     this.count = value;
     if (this.product.countInCart) {
@@ -141,5 +113,20 @@ export class DetailComponent implements OnInit {
 
   updateFavorites(): void {
     FavoritesUtil.updateFavorites(this.authService, this.favoriteService, this.product, this._snackBar);
+  }
+
+  addToCart(): void {
+    this.cartService.updateCart(this.product.id, this.count).subscribe((data: CartType | DefaultResponseType) => {
+      SnackbarErrorUtil.showErrorMessageIfErrorAndThrowError(data as DefaultResponseType, this._snackBar);
+      this.product.countInCart = this.count;
+    });
+  }
+
+  removeFromCart(): void {
+    this.cartService.updateCart(this.product.id, 0).subscribe((data: CartType | DefaultResponseType) => {
+      SnackbarErrorUtil.showErrorMessageIfErrorAndThrowError(data as DefaultResponseType, this._snackBar);
+      this.product.countInCart = 0;
+      this.count = 1;
+    });
   }
 }

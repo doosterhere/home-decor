@@ -6,6 +6,7 @@ import {FavoritesService} from "../../services/favorites.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {CartType} from "../../../../types/cart.type";
 import {CartService} from "../../services/cart.service";
+import {SnackbarErrorUtil} from "../../utils/snackbar-error.util";
 
 @Component({
   selector: 'favorites-product',
@@ -25,12 +26,7 @@ export class FavoritesProductComponent implements OnInit {
 
   ngOnInit(): void {
     this.cartService.getCart().subscribe((data: CartType | DefaultResponseType) => {
-      if ((data as DefaultResponseType).error) {
-        const message = (data as DefaultResponseType).message;
-        this._snackBar.open(message);
-        throw new Error(message);
-      }
-
+      SnackbarErrorUtil.showErrorMessageIfErrorAndThrowError(data as DefaultResponseType, this._snackBar);
       const product = (data as CartType).items.find(item => item.product.id === this.product.id);
       if (product && product.quantity) {
         this.count = product.quantity;
@@ -41,11 +37,7 @@ export class FavoritesProductComponent implements OnInit {
 
   removeFromFavorites(): void {
     this.favoriteService.removeFromFavorites(this.product.id).subscribe((data: DefaultResponseType) => {
-      if (data.error) {
-        this._snackBar.open(data.message);
-        throw new Error(data.message);
-      }
-
+      SnackbarErrorUtil.showErrorMessageIfErrorAndThrowError(data, this._snackBar);
       this.favoriteService.isListOfFavoritesUpdated$.next(this.product.id);
       this._snackBar.open(data.message);
     });
@@ -60,24 +52,14 @@ export class FavoritesProductComponent implements OnInit {
 
   addToCart(): void {
     this.cartService.updateCart(this.product.id, this.count).subscribe((data: CartType | DefaultResponseType) => {
-      if ((data as DefaultResponseType).error) {
-        const message = (data as DefaultResponseType).message;
-        this._snackBar.open(message);
-        throw new Error(message);
-      }
-
+      SnackbarErrorUtil.showErrorMessageIfErrorAndThrowError(data as DefaultResponseType, this._snackBar);
       this.countInCart = this.count;
     });
   }
 
   removeFromCart(): void {
     this.cartService.updateCart(this.product.id, 0).subscribe((data: CartType | DefaultResponseType) => {
-      if ((data as DefaultResponseType).error) {
-        const message = (data as DefaultResponseType).message;
-        this._snackBar.open(message);
-        throw new Error(message);
-      }
-
+      SnackbarErrorUtil.showErrorMessageIfErrorAndThrowError(data as DefaultResponseType, this._snackBar);
       this.countInCart = 0;
       this.count = 1;
     });

@@ -4,6 +4,7 @@ import {DefaultResponseType} from "../../../../types/default-response.type";
 import {OrderType} from "../../../../types/order.type";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {OrderStatusUtil} from "../../../shared/utils/order-status.util";
+import {SnackbarErrorUtil} from "../../../shared/utils/snackbar-error.util";
 
 @Component({
   selector: 'app-orders',
@@ -19,12 +20,7 @@ export class OrdersComponent implements OnInit {
 
   ngOnInit(): void {
     this.orderService.getOrders().subscribe((data: OrderType[] | DefaultResponseType) => {
-      if ((data as DefaultResponseType).error) {
-        const message = (data as DefaultResponseType).message;
-        this._snackBar.open(message);
-        throw new Error(message);
-      }
-
+      SnackbarErrorUtil.showErrorMessageIfErrorAndThrowError(data as DefaultResponseType, this._snackBar);
       this.orders = (data as OrderType[]).map(item => {
         item.statusAndColor = OrderStatusUtil.getStatusAndColor(item.status);
         return item;

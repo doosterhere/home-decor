@@ -3,6 +3,8 @@ import {FavoritesService} from "../../../shared/services/favorites.service";
 import {FavoritesType} from "../../../../types/favorites.type";
 import {DefaultResponseType} from "../../../../types/default-response.type";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {CartService} from "../../../shared/services/cart.service";
+import {SnackbarErrorUtil} from "../../../shared/utils/snackbar-error.util";
 
 @Component({
   selector: 'app-favorites',
@@ -18,12 +20,7 @@ export class FavoritesComponent implements OnInit {
 
   ngOnInit(): void {
     this.favoriteService.getFavorites().subscribe((data: FavoritesType[] | DefaultResponseType) => {
-      if ((data as DefaultResponseType).error) {
-        const message = (data as DefaultResponseType).message;
-        this._snackBar.open(message);
-        throw new Error(message);
-      }
-
+      SnackbarErrorUtil.showErrorMessageIfErrorAndThrowError(data as DefaultResponseType, this._snackBar);
       this.products = (data as FavoritesType[]);
     });
 

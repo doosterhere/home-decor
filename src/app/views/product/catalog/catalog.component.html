@@ -43,6 +43,7 @@
       </div>
       <div class="catalog__items" *ngIf="products.length && requestSuccess">
         <product-card [countInCart]="product.countInCart ? product.countInCart : 0" [product]="product"
+                      [isLogged]="isLogged"
                       *ngFor="let product of products"></product-card>
       </div>
       <div *ngIf="!products.length && requestSuccess">

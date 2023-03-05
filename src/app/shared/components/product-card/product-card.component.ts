@@ -9,6 +9,7 @@ import {AuthService} from "../../../core/auth/auth.service";
 import {FavoritesService} from "../../services/favorites.service";
 import {Router} from "@angular/router";
 import {FavoritesUtil} from "../../utils/favorites.util";
+import {SnackbarErrorUtil} from "../../utils/snackbar-error.util";
 
 @Component({
   selector: 'product-card',
@@ -21,6 +22,7 @@ export class ProductCardComponent implements OnInit {
   @Input() countInCart: number = 0;
   serverStaticPath: string = environment.serverStaticPath;
   count: number = 1;
+  @Input() isLogged: boolean = false;
 
   constructor(private cartService: CartService,
               private _snackBar: MatSnackBar,
@@ -33,31 +35,6 @@ export class ProductCardComponent implements OnInit {
     if (this.countInCart) {
       this.count = this.countInCart;
     }
-  }
-
-  addToCart(): void {
-    this.cartService.updateCart(this.product.id, this.count).subscribe((data: CartType | DefaultResponseType) => {
-      if ((data as DefaultResponseType).error) {
-        const message = (data as DefaultResponseType).message;
-        this._snackBar.open(message);
-        throw new Error(message);
-      }
-
-      this.countInCart = this.count;
-    });
-  }
-
-  removeFromCart(): void {
-    this.cartService.updateCart(this.product.id, 0).subscribe((data: CartType | DefaultResponseType) => {
-      if ((data as DefaultResponseType).error) {
-        const message = (data as DefaultResponseType).message;
-        this._snackBar.open(message);
-        throw new Error(message);
-      }
-
-      this.countInCart = 0;
-      this.count = 1;
-    });
   }
 
   updateCount(value: number): void {
@@ -75,5 +52,20 @@ export class ProductCardComponent implements OnInit {
     if (this.isLight) {
       this.router.navigate(['/product/' + this.product.url]);
     }
+  }
+
+  addToCart(): void {
+    this.cartService.updateCart(this.product.id, this.count).subscribe((data: CartType | DefaultResponseType) => {
+      SnackbarErrorUtil.showErrorMessageIfErrorAndThrowError(data as DefaultResponseType, this._snackBar);
+      this.countInCart = this.count;
+    });
+  }
+
+  removeFromCart(): void {
+    this.cartService.updateCart(this.product.id, 0).subscribe((data: CartType | DefaultResponseType) => {
+      SnackbarErrorUtil.showErrorMessageIfErrorAndThrowError(data as DefaultResponseType, this._snackBar);
+      this.countInCart = 0;
+      this.count = 1;
+    });
   }
 }

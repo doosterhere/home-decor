@@ -53,7 +53,8 @@ header.header {
       .header__top-actions {
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        justify-content: flex-end;
+        width: 105px;
 
         a {
           position: relative;

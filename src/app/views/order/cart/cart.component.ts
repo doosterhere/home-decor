@@ -8,6 +8,7 @@ import {environment} from "../../../../environments/environment";
 import {DefaultResponseType} from "../../../../types/default-response.type";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {CartUtil} from "../../../shared/utils/cart.util";
+import {SnackbarErrorUtil} from "../../../shared/utils/snackbar-error.util";
 
 @Component({
   selector: 'cart',
@@ -70,12 +71,7 @@ export class CartComponent implements OnInit {
   updateCount(productId: string, count: number): void {
     if (this.cart) {
       this.cartService.updateCart(productId, count).subscribe((data: CartType | DefaultResponseType) => {
-        if ((data as DefaultResponseType).error) {
-          const message = (data as DefaultResponseType).message;
-          this._snackBar.open(message);
-          throw new Error(message);
-        }
-
+        SnackbarErrorUtil.showErrorMessageIfErrorAndThrowError(data as DefaultResponseType, this._snackBar);
         this.cart = data as CartType;
         [this.totalAmount, this.totalCount] = CartUtil.calculateTotal(this.cart);
       });

@@ -4,8 +4,6 @@
 .favorites {
   padding-top: 50px;
   padding-bottom: 110px;
-  box-sizing: border-box;
-  min-height: calc(100vh - 222px - 325px); // minus header and footer heights
 
   .container {
     .favorites__title {

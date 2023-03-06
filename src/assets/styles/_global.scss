@@ -7,6 +7,16 @@ html, body {
   font-weight: 400;
 }
 
+app-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+
+  > .ng-star-inserted {
+    flex-grow: 1;
+  }
+}
+
 .container {
   max-width: $container-width;
   margin: 0 auto;

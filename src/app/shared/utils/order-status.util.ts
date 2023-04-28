@@ -8,6 +8,13 @@ export class OrderStatusUtil {
         color: '#CCCCCC'
       }
     }
+	
+	if (!((Object.values(OrderStatusType) as string[]).includes(status))) {
+      return {
+        name: 'Неизвестный',
+        color: '#CCCCCC'
+      }
+    }
 
     const names = {
       new: 'Новый',

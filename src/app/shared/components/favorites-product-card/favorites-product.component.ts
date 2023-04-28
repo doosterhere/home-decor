@@ -17,7 +17,7 @@ import {Subscription} from "rxjs";
 export class FavoritesProductComponent implements OnInit, OnDestroy {
   @Input() product!: FavoritesType;
   serverStaticPath: string = environment.serverStaticPath;
-  @Input() countInCart: number = 0;
+  countInCart: number = 0;
   count: number = 1;
   cartServiceGetCartSubscription: Subscription | null = null;
   favoriteServiceRemoveFromFavoritesSubscription: Subscription | null = null;

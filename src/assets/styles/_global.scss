@@ -52,6 +52,8 @@ app-layout {
 }
 
 .input, .small-input {
+  outline: none;
+
   &:hover,
   &:focus,
   &:active {
@@ -65,7 +67,7 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 
-input [type=number] {
+input[type='number'] {
   -moz-appearance: textfield;
 }
 

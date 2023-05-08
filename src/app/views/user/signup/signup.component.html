@@ -8,18 +8,31 @@
                  [ngStyle]="{'border-color': signupForm.get('email')?.invalid &&
                  (signupForm.get('email')?.dirty || signupForm.get('email')?.touched) ? '#DE1818' : ''}"
                  formControlName="email">
+          <div class="hint" [ngStyle]="{'display' : signupForm.get('email')?.invalid &&
+                 (signupForm.get('email')?.dirty || signupForm.get('email')?.touched) ? 'block' : 'none'}">
+            Введите действительный адрес электронной почты
+          </div>
         </div>
         <div class="auth-form__input">
           <input type="password" class="input" placeholder="Пароль"
                  [ngStyle]="{'border-color': signupForm.get('password')?.invalid &&
                  (signupForm.get('password')?.dirty || signupForm.get('password')?.touched) ? '#DE1818' : ''}"
                  formControlName="password">
+          <div class="hint" [ngStyle]="{'display' : signupForm.get('password')?.invalid &&
+                 (signupForm.get('password')?.dirty || signupForm.get('password')?.touched) ? 'block' : 'none'}">
+            Пароль должен иметь длину не менее 8-ми символов. Обязательно наличие цифр, заглавной и строчной латинской
+            букв
+          </div>
         </div>
         <div class="auth-form__input">
           <input type="password" class="input" placeholder="Повторите пароль"
                  [ngStyle]="{'border-color': signupForm.get('passwordRepeat')?.invalid &&
                  (signupForm.get('passwordRepeat')?.dirty || signupForm.get('passwordRepeat')?.touched) ? '#DE1818' : ''}"
                  formControlName="passwordRepeat">
+          <div class="hint" [ngStyle]="{'display' : signupForm.get('passwordRepeat')?.invalid &&
+                 (signupForm.get('passwordRepeat')?.dirty || signupForm.get('passwordRepeat')?.touched) ? 'block' : 'none'}">
+            Пароли не совпадают
+          </div>
         </div>
         <div class="auth-form__checkbox">
           <input type="checkbox" id="agree" formControlName="agree">

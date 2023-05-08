@@ -8,12 +8,13 @@
                  [ngStyle]="{'border-color': loginForm.get('email')?.invalid &&
                  (loginForm.get('email')?.dirty || loginForm.get('email')?.touched) ? '#DE1818' : ''}"
                  formControlName="email">
+          <div class="hint" [ngStyle]="{'display' : loginForm.get('email')?.invalid &&
+                 (loginForm.get('email')?.dirty || loginForm.get('email')?.touched) ? 'block' : 'none'}">
+            Введите действительный адрес электронной почты
+          </div>
         </div>
         <div class="auth-form__input">
-          <input type="password" class="input" placeholder="Пароль"
-                 [ngStyle]="{'border-color': loginForm.get('password')?.invalid &&
-                 (loginForm.get('password')?.dirty || loginForm.get('password')?.touched) ? '#DE1818' : ''}"
-                 formControlName="password">
+          <input type="password" class="input" placeholder="Пароль" formControlName="password">
         </div>
         <div class="auth-form__checkbox">
           <input type="checkbox" id="remember"

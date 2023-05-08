@@ -42,6 +42,10 @@ footer.footer {
               text-decoration: none;
               cursor: pointer;
             }
+
+            &:hover a {
+              color: $color-black;
+            }
           }
         }
       }
@@ -66,6 +70,10 @@ footer.footer {
           align-items: center;
           gap: 12px;
           margin-bottom: 55px;
+
+          a:hover svg path {
+            fill: $color-black;
+          }
         }
 
         .footer-block__payment {

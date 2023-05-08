@@ -39,6 +39,10 @@ header.header {
               cursor: pointer;
               text-decoration: none;
             }
+
+            &:hover a {
+              color: $color-black;
+            }
           }
         }
       }
@@ -112,6 +116,10 @@ header.header {
               color: $color-primary;
               text-decoration: none;
               cursor: pointer;
+            }
+
+            &:hover a {
+              color: $color-black;
             }
           }
         }

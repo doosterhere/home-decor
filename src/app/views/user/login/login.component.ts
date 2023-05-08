@@ -39,7 +39,7 @@ export class LoginComponent implements OnDestroy {
           next: (data: DefaultResponseType | LoginResponseType) => {
             let error: string | null = null;
             if ((data as DefaultResponseType).error !== undefined) {
-              error = (data as DefaultResponseType).message
+              error = (data as DefaultResponseType).message;
             }
 
             const loginResponse = data as LoginResponseType;
@@ -59,7 +59,7 @@ export class LoginComponent implements OnDestroy {
           },
           error: (errorResponse: HttpErrorResponse) => {
             if (errorResponse.error && errorResponse.error.message) {
-              this._snackBar.open(errorResponse.message);
+              this._snackBar.open(errorResponse.error.message);
             } else {
               this._snackBar.open('Ошибка авторизации');
             }

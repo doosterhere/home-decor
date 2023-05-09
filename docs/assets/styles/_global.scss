@@ -1,0 +1,243 @@
+@import "variables";
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+}
+
+app-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+
+  > .ng-star-inserted {
+    flex-grow: 1;
+  }
+}
+
+.container {
+  max-width: $container-width;
+  margin: 0 auto;
+}
+
+.input {
+  box-sizing: border-box;
+  padding: 17px 20px;
+  border: 2px solid $color-input-default;
+  border-radius: 3px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: $color-primary;
+
+  &::placeholder {
+    color: #A8ABA7;
+  }
+}
+
+.small-input {
+  border: 1px solid $color-input-default;
+  border-radius: 5px;
+  text-align: center;
+  padding: 2px;
+  box-sizing: border-box;
+  width: 40px;
+  height: 28px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-size: 18px;
+  color: $color-primary;
+}
+
+.input, .small-input {
+  outline: none;
+
+  &:hover,
+  &:focus,
+  &:active {
+    border-color: $color-input-action;
+  }
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+.button {
+  text-align: center;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  background: $color-button-default;
+  border-radius: 5px;
+  box-sizing: border-box;
+  cursor: pointer;
+  border: 1px solid transparent;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  color: $color-white;
+  user-select: none;
+
+  &.button_transparent {
+    background-color: transparent;
+    border: 1px solid $color-button-hover;
+    color: $color-primary;
+
+    &:hover {
+      color: $color-white;
+    }
+  }
+
+  &.button_with-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+
+    &:hover svg path {
+      fill: $color-white;
+    }
+  }
+
+  &.button_in-cart {
+    span:first-child {
+      display: inline;
+    }
+
+    span:last-child {
+      display: none;
+    }
+
+    &:hover {
+      span:first-child {
+        display: none;
+      }
+
+      span:last-child {
+        display: inline;
+      }
+    }
+  }
+
+  &:hover {
+    background-color: $color-button-hover;
+  }
+
+  &:active {
+    background-color: $color-button-pressed;
+  }
+
+  &:disabled {
+    background-color: $color-button-disabled;
+    cursor: not-allowed;
+  }
+}
+
+a.button {
+  text-decoration: none;
+  display: inline-block;
+}
+
+.mat-mdc-menu-item {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+
+  a {
+    text-decoration: none;
+    color: $color-text-secondary;
+  }
+}
+
+.carousel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 50px;
+
+  .carousel__title {
+    @include header-lora-32;
+  }
+
+  .carousel__arrows {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+
+    a {
+      cursor: pointer;
+    }
+  }
+}
+
+[type='radio']:checked,
+[type='radio']:not(:checked), {
+  position: absolute;
+  left: -9999px;
+}
+
+[type='radio']:checked + label,
+[type='radio']:not(:checked) + label {
+  position: relative;
+  padding-left: 28px;
+  cursor: pointer;
+  line-height: 20px;
+  display: inline-block;
+  color: #666;
+}
+
+[type='radio']:checked + label:before,
+[type='radio']:not(:checked) + label:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 18px;
+  height: 18px;
+  border: 2px solid $color-secondary-01;
+  border-radius: 100%;
+  background: $color-white;
+  box-sizing: border-box;
+}
+
+[type='radio']:checked + label:after,
+[type='radio']:not(:checked) + label:after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  background: $color-secondary-01;
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  border-radius: 100%;
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+}
+
+[type='radio']:not(:checked) + label:after {
+  opacity: 0;
+  -webkit-transform: scale(0);
+  scale: 0;
+}
+
+[type='radio']:checked + label:after {
+  opacity: 1;
+  -webkit-transform: scale(1);
+  scale: 1;
+}
+
+input[type='text']:disabled {
+  border-color: $color-disabled;
+}
+
+.mat-mdc-progress-spinner {
+  --mdc-circular-progress-active-indicator-color: #6CAC72;
+}

@@ -1,20 +1,21 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {CategoryWithTypesType} from "../../../../types/category-with-types.type";
-import {ActivatedRoute, Router} from "@angular/router";
-import {ActiveParamsType} from "../../../../types/active-params.type";
-import {ActiveParamsUtil} from "../../utils/active-params.util";
-import {Subscription} from "rxjs";
+import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from "@angular/router";
+import { Subscription } from "rxjs";
 
-@Component({
+import { CategoryWithTypesType } from "../../../../types/category-with-types.type";
+import { ActiveParamsType } from "../../../../types/active-params.type";
+import { ActiveParamsUtil } from "../../utils/active-params.util";
+
+@Component( {
   selector: 'category-filter',
   templateUrl: './category-filter.component.html',
   styleUrls: ['./category-filter.component.scss']
-})
+} )
 export class CategoryFilterComponent implements OnInit {
   @Input() categoryWithTypes: CategoryWithTypesType | null = null;
   @Input() type: string | null = null;
   open: boolean = false;
-  activeParams: ActiveParamsType = {types: []};
+  activeParams: ActiveParamsType = { types: [] };
   to: number | null = null;
   from: number | null = null;
   activatedRouteQueryParamsSubscription: Subscription | null = null;
@@ -25,8 +26,8 @@ export class CategoryFilterComponent implements OnInit {
 
   ngOnInit(): void {
     this.activatedRouteQueryParamsSubscription = this.activatedRoute.queryParams
-      .subscribe(params => {
-        this.activeParams = ActiveParamsUtil.processParams(params);
+      .subscribe( params => {
+        this.activeParams = ActiveParamsUtil.processParams( params );
 
         if (this.type) {
           if (this.type === 'height') {
@@ -47,15 +48,15 @@ export class CategoryFilterComponent implements OnInit {
         }
 
         if (!this.type && params['types']) {
-          this.activeParams.types = Array.isArray(params['types']) ? params['types'] : [params['types']];
+          this.activeParams.types = Array.isArray( params['types'] ) ? params['types'] : [params['types']];
 
           if (this.categoryWithTypes && this.categoryWithTypes.types &&
             this.categoryWithTypes.types.length &&
-            this.categoryWithTypes.types.some(type => this.activeParams.types.find(item => type.url === item))) {
+            this.categoryWithTypes.types.some( type => this.activeParams.types.find( item => type.url === item ) )) {
             this.open = true;
           }
         }
-      });
+      } );
   }
 
   ngOnDestroy(): void {
@@ -84,10 +85,10 @@ export class CategoryFilterComponent implements OnInit {
 
   updateFilterParam(url: string, checked: boolean): void {
     if (this.activeParams.types && this.activeParams.types?.length) {
-      const existingTypeInParams: string | undefined = this.activeParams.types.find(item => item === url);
+      const existingTypeInParams: string | undefined = this.activeParams.types.find( item => item === url );
 
       if (existingTypeInParams && !checked) {
-        this.activeParams.types = this.activeParams.types.filter(item => item !== url);
+        this.activeParams.types = this.activeParams.types.filter( item => item !== url );
       }
 
       if (!existingTypeInParams && checked) {
@@ -101,9 +102,9 @@ export class CategoryFilterComponent implements OnInit {
     }
 
     this.activeParams.page = 1;
-    this.router.navigate(['/catalog'], {
+    this.router.navigate( ['/catalog'], {
       queryParams: this.activeParams
-    });
+    } );
   }
 
   updateFilterParamFromTo(param: string, value: string): void {
@@ -111,13 +112,13 @@ export class CategoryFilterComponent implements OnInit {
       if (this.activeParams[param] && !value) {
         delete this.activeParams[param];
       } else {
-        this.activeParams[param] = Number(value);
+        this.activeParams[param] = Number( value );
       }
     }
 
     this.activeParams.page = 1;
-    this.router.navigate(['/catalog'], {
+    this.router.navigate( ['/catalog'], {
       queryParams: this.activeParams
-    });
+    } );
   }
 }

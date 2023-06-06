@@ -1,17 +1,18 @@
 @import "../../../../assets/styles/variables";
 
 .count-selector {
+  width: 97px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 97px;
 
   div {
+    height: 28px;
     display: flex;
     justify-content: center;
     align-items: center;
+
     cursor: pointer;
-    height: 28px;
 
     &:first-child {
       width: 12px;

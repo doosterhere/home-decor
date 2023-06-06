@@ -2,9 +2,11 @@
 @import "../../../../assets/styles/personal";
 
 .info {
+  position: relative;
+
   padding-top: 50px;
   padding-bottom: 128px;
-  position: relative;
+
   overflow: hidden;
 
   .container {
@@ -23,6 +25,17 @@
 
     img {
       vertical-align: bottom;
+    }
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .info {
+    padding-top: 40px;
+    padding-bottom: 98px;
+
+    .info__image {
+      display: none;
     }
   }
 }

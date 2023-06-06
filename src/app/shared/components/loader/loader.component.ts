@@ -1,12 +1,13 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {LoaderService} from "../../services/loader.service";
-import {Subscription} from "rxjs";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from "rxjs";
 
-@Component({
+import { LoaderService } from "../../services/loader.service";
+
+@Component( {
   selector: 'app-loader',
   templateUrl: './loader.component.html',
   styleUrls: ['./loader.component.scss']
-})
+} )
 export class LoaderComponent implements OnInit, OnDestroy {
   isShowed: boolean = false;
   loaderServiceIsShowed$Subscription: Subscription | null = null;
@@ -16,9 +17,9 @@ export class LoaderComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loaderServiceIsShowed$Subscription = this.loaderService.isShowed$
-      .subscribe((isShowed: boolean) => {
+      .subscribe( (isShowed: boolean) => {
         this.isShowed = isShowed;
-      });
+      } );
   }
 
   ngOnDestroy(): void {

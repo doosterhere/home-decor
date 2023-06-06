@@ -1,29 +1,31 @@
-import {Component, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild} from '@angular/core';
-import {CartService} from "../../../shared/services/cart.service";
-import {DefaultResponseType} from "../../../../types/default-response.type";
-import {CartType} from "../../../../types/cart.type";
-import {CartUtil} from "../../../shared/utils/cart.util";
-import {config} from "../../../shared/config/config";
-import {Router} from "@angular/router";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {DeliveryType} from "../../../../types/delivery.type";
-import {FormBuilder, Validators} from "@angular/forms";
-import {PaymentType} from "../../../../types/payment.type";
-import {MatDialog, MatDialogRef} from "@angular/material/dialog";
-import {OrderService} from "../../../shared/services/order.service";
-import {OrderType} from "../../../../types/order.type";
-import {HttpErrorResponse} from "@angular/common/http";
-import {UserService} from "../../../shared/services/user.service";
-import {UserInfoType} from "../../../../types/user-info.type";
-import {AuthService} from "../../../core/auth/auth.service";
-import {SnackbarErrorUtil} from "../../../shared/utils/snackbar-error.util";
-import {Subscription} from "rxjs";
+import { Component, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Router } from "@angular/router";
+import { FormBuilder, Validators } from "@angular/forms";
+import { HttpErrorResponse } from "@angular/common/http";
+import { Subscription } from "rxjs";
 
-@Component({
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
+
+import { CartService } from "../../../shared/services/cart.service";
+import { DefaultResponseType } from "../../../../types/default-response.type";
+import { CartType } from "../../../../types/cart.type";
+import { CartUtil } from "../../../shared/utils/cart.util";
+import { config } from "../../../shared/config/config";
+import { DeliveryType } from "../../../../types/delivery.type";
+import { PaymentType } from "../../../../types/payment.type";
+import { OrderService } from "../../../shared/services/order.service";
+import { OrderType } from "../../../../types/order.type";
+import { UserService } from "../../../shared/services/user.service";
+import { UserInfoType } from "../../../../types/user-info.type";
+import { AuthService } from "../../../core/auth/auth.service";
+import { SnackbarErrorUtil } from "../../../shared/utils/snackbar-error.util";
+
+@Component( {
   selector: 'order',
   templateUrl: './order.component.html',
   styleUrls: ['./order.component.scss']
-})
+} )
 export class OrderComponent implements OnInit, OnDestroy {
   cart: CartType | null = null;
   totalAmount: number = 0;
@@ -32,7 +34,7 @@ export class OrderComponent implements OnInit, OnDestroy {
   deliveryType: DeliveryType = DeliveryType.delivery;
   deliveryTypes = DeliveryType;
   paymentTypes = PaymentType;
-  orderForm = this.fb.group({
+  orderForm = this.fb.group( {
     firstName: ['', Validators.required],
     lastName: ['', Validators.required],
     fatherName: [''],
@@ -44,8 +46,8 @@ export class OrderComponent implements OnInit, OnDestroy {
     entrance: [''],
     apartment: [''],
     comment: ['']
-  });
-  @ViewChild('popup') popup!: TemplateRef<ElementRef>;
+  } );
+  @ViewChild( 'popup' ) popup!: TemplateRef<ElementRef>;
   dialogRef: MatDialogRef<any> | null = null;
   cartServiceGetCartSubscription: Subscription | null = null;
   userServiceGetUserInfoSubscription: Subscription | null = null;
@@ -64,25 +66,25 @@ export class OrderComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.cartServiceGetCartSubscription = this.cartService.getCart()
-      .subscribe((data: DefaultResponseType | CartType) => {
-        if ((data as DefaultResponseType).error) {
-          throw new Error((data as DefaultResponseType).message);
+      .subscribe( (data: DefaultResponseType | CartType) => {
+        if (( data as DefaultResponseType ).error) {
+          throw new Error( ( data as DefaultResponseType ).message );
         }
 
         this.cart = data as CartType;
-        if (!this.cart || (this.cart && !this.cart.items.length)) {
-          this._snackBar.open('Корзина пустая');
-          this.router.navigate(['/']);
+        if (!this.cart || ( this.cart && !this.cart.items.length )) {
+          this._snackBar.open( 'Корзина пустая' );
+          this.router.navigate( ['/'] );
           return;
         }
 
-        [this.totalAmount, this.totalCount] = CartUtil.calculateTotal(this.cart);
-      });
+        [this.totalAmount, this.totalCount] = CartUtil.calculateTotal( this.cart );
+      } );
 
     if (this.authService.isLogged) {
       this.userServiceGetUserInfoSubscription = this.userService.getUserInfo()
-        .subscribe((data: UserInfoType | DefaultResponseType) => {
-          SnackbarErrorUtil.showErrorMessageIfErrorAndThrowError(data as DefaultResponseType, this._snackBar);
+        .subscribe( (data: UserInfoType | DefaultResponseType) => {
+          SnackbarErrorUtil.showErrorMessageIfErrorAndThrowError( data as DefaultResponseType, this._snackBar );
 
           const userInfo = data as UserInfoType;
           const paramToUpdate = {
@@ -99,13 +101,13 @@ export class OrderComponent implements OnInit, OnDestroy {
             comment: ''
           }
 
-          this.orderForm.setValue(paramToUpdate);
+          this.orderForm.setValue( paramToUpdate );
 
           if (userInfo.deliveryType) {
             this.deliveryType = userInfo.deliveryType;
-            this.changeDeliveryType(this.deliveryType);
+            this.changeDeliveryType( this.deliveryType );
           }
-        });
+        } );
     }
   }
 
@@ -122,29 +124,29 @@ export class OrderComponent implements OnInit, OnDestroy {
 
   updateDeliveryTypeValidation(): void {
     if (this.deliveryType === DeliveryType.delivery) {
-      this.orderForm.get('street')?.setValidators(Validators.required);
-      this.orderForm.get('street')?.enable();
-      this.orderForm.get('house')?.setValidators(Validators.required);
-      this.orderForm.get('house')?.enable();
-      this.orderForm.get('entrance')?.enable();
-      this.orderForm.get('apartment')?.enable();
+      this.orderForm.get( 'street' )?.setValidators( Validators.required );
+      this.orderForm.get( 'street' )?.enable();
+      this.orderForm.get( 'house' )?.setValidators( Validators.required );
+      this.orderForm.get( 'house' )?.enable();
+      this.orderForm.get( 'entrance' )?.enable();
+      this.orderForm.get( 'apartment' )?.enable();
     }
 
     if (this.deliveryType === DeliveryType.self) {
-      this.orderForm.get('street')?.removeValidators(Validators.required);
-      this.orderForm.get('house')?.removeValidators(Validators.required);
-      this.orderForm.get('street')?.setValue('');
-      this.orderForm.get('street')?.disable();
-      this.orderForm.get('house')?.setValue('');
-      this.orderForm.get('house')?.disable();
-      this.orderForm.get('entrance')?.setValue('');
-      this.orderForm.get('entrance')?.disable();
-      this.orderForm.get('apartment')?.setValue('');
-      this.orderForm.get('apartment')?.disable();
+      this.orderForm.get( 'street' )?.removeValidators( Validators.required );
+      this.orderForm.get( 'house' )?.removeValidators( Validators.required );
+      this.orderForm.get( 'street' )?.setValue( '' );
+      this.orderForm.get( 'street' )?.disable();
+      this.orderForm.get( 'house' )?.setValue( '' );
+      this.orderForm.get( 'house' )?.disable();
+      this.orderForm.get( 'entrance' )?.setValue( '' );
+      this.orderForm.get( 'entrance' )?.disable();
+      this.orderForm.get( 'apartment' )?.setValue( '' );
+      this.orderForm.get( 'apartment' )?.disable();
     }
 
-    this.orderForm.get('street')?.updateValueAndValidity();
-    this.orderForm.get('house')?.updateValueAndValidity();
+    this.orderForm.get( 'street' )?.updateValueAndValidity();
+    this.orderForm.get( 'house' )?.updateValueAndValidity();
   }
 
   createOrder(): void {
@@ -181,35 +183,35 @@ export class OrderComponent implements OnInit, OnDestroy {
         paramsObject.comment = this.orderForm.value.comment;
       }
 
-      this.orderServiceCreateOrderSubscription = this.orderService.createOrder(paramsObject)
-        .subscribe({
+      this.orderServiceCreateOrderSubscription = this.orderService.createOrder( paramsObject )
+        .subscribe( {
           next: (data: DefaultResponseType | OrderType) => {
-            SnackbarErrorUtil.showErrorMessageIfErrorAndThrowError(data as DefaultResponseType, this._snackBar);
+            SnackbarErrorUtil.showErrorMessageIfErrorAndThrowError( data as DefaultResponseType, this._snackBar );
 
-            this.dialogRef = this.dialog.open(this.popup);
-            this.dialogRef.backdropClick().subscribe(() => {
-              this.router.navigate(['/']);
-            });
-            this.cartService.setCount(0);
+            this.dialogRef = this.dialog.open( this.popup );
+            this.dialogRef.backdropClick().subscribe( () => {
+              this.router.navigate( ['/'] );
+            } );
+            this.cartService.setCount( 0 );
           },
           error: (errorResponse: HttpErrorResponse) => {
             if (errorResponse.error && errorResponse.error.message) {
-              this._snackBar.open(errorResponse.error.message);
+              this._snackBar.open( errorResponse.error.message );
             } else {
-              this._snackBar.open('Ошибка заказа');
+              this._snackBar.open( 'Ошибка заказа' );
             }
           }
-        });
+        } );
     }
 
     if (this.orderForm.invalid) {
       this.orderForm.markAllAsTouched();
-      this._snackBar.open('Заполните необходимые поля');
+      this._snackBar.open( 'Заполните необходимые поля' );
     }
   }
 
   closePopup(): void {
     this.dialogRef?.close();
-    this.router.navigate(['/']);
+    this.router.navigate( ['/'] );
   }
 }

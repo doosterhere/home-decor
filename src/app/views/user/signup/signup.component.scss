@@ -15,3 +15,41 @@
     }
   }
 }
+
+@media screen and (max-width: 1300px) {
+  .signup {
+    .container {
+      overflow: hidden;
+
+      .page-image {
+        margin-left: 100px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1023px) {
+  .signup {
+    .container {
+      overflow: hidden;
+
+      .page-image {
+        margin-left: 20px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .signup {
+    justify-content: center;
+
+    .container {
+      overflow: unset;
+
+      .page-image {
+        display: none;
+      }
+    }
+  }
+}

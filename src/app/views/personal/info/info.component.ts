@@ -1,25 +1,27 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {FormBuilder, Validators} from "@angular/forms";
-import {PaymentType} from "../../../../types/payment.type";
-import {DeliveryType} from "../../../../types/delivery.type";
-import {UserService} from "../../../shared/services/user.service";
-import {UserInfoType} from "../../../../types/user-info.type";
-import {DefaultResponseType} from "../../../../types/default-response.type";
-import {HttpErrorResponse} from "@angular/common/http";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {SnackbarErrorUtil} from "../../../shared/utils/snackbar-error.util";
-import {Subscription} from "rxjs";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, Validators } from "@angular/forms";
+import { HttpErrorResponse } from "@angular/common/http";
+import { Subscription } from "rxjs";
 
-@Component({
+import { MatSnackBar } from "@angular/material/snack-bar";
+
+import { PaymentType } from "../../../../types/payment.type";
+import { DeliveryType } from "../../../../types/delivery.type";
+import { UserService } from "../../../shared/services/user.service";
+import { UserInfoType } from "../../../../types/user-info.type";
+import { DefaultResponseType } from "../../../../types/default-response.type";
+import { SnackbarErrorUtil } from "../../../shared/utils/snackbar-error.util";
+
+@Component( {
   selector: 'app-info',
   templateUrl: './info.component.html',
   styleUrls: ['./info.component.scss']
-})
+} )
 export class InfoComponent implements OnInit, OnDestroy {
   deliveryType: DeliveryType = DeliveryType.delivery;
   deliveryTypes = DeliveryType;
   paymentTypes = PaymentType;
-  userInfoForm = this.fb.group({
+  userInfoForm = this.fb.group( {
     firstName: [''],
     lastName: [''],
     fatherName: [''],
@@ -30,7 +32,7 @@ export class InfoComponent implements OnInit, OnDestroy {
     house: [''],
     entrance: [''],
     apartment: ['']
-  });
+  } );
   userServiceGetUserInfoSubscription: Subscription | null = null;
   userServiceUpdateUserInfoSubscription: Subscription | null = null;
 
@@ -41,8 +43,8 @@ export class InfoComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.userServiceGetUserInfoSubscription = this.userService.getUserInfo()
-      .subscribe((data: UserInfoType | DefaultResponseType) => {
-        SnackbarErrorUtil.showErrorMessageIfErrorAndThrowError(data as DefaultResponseType, this._snackBar);
+      .subscribe( (data: UserInfoType | DefaultResponseType) => {
+        SnackbarErrorUtil.showErrorMessageIfErrorAndThrowError( data as DefaultResponseType, this._snackBar );
 
         const userInfo = data as UserInfoType;
         const paramToUpdate = {
@@ -58,12 +60,12 @@ export class InfoComponent implements OnInit, OnDestroy {
           apartment: userInfo.apartment ? userInfo.apartment : ''
         }
 
-        this.userInfoForm.setValue(paramToUpdate);
+        this.userInfoForm.setValue( paramToUpdate );
 
         if (userInfo.deliveryType) {
           this.deliveryType = userInfo.deliveryType;
         }
-      });
+      } );
   }
 
   ngOnDestroy(): void {
@@ -116,21 +118,21 @@ export class InfoComponent implements OnInit, OnDestroy {
         paramObject.apartment = this.userInfoForm.value.apartment;
       }
 
-      this.userServiceUpdateUserInfoSubscription = this.userService.updateUserInfo(paramObject)
-        .subscribe({
+      this.userServiceUpdateUserInfoSubscription = this.userService.updateUserInfo( paramObject )
+        .subscribe( {
           next: (data: DefaultResponseType) => {
-            SnackbarErrorUtil.showErrorMessageIfErrorAndThrowError(data, this._snackBar);
-            this._snackBar.open(data.message);
+            SnackbarErrorUtil.showErrorMessageIfErrorAndThrowError( data, this._snackBar );
+            this._snackBar.open( data.message );
             this.userInfoForm.markAsPristine();
           },
           error: (errorResponse: HttpErrorResponse) => {
             if (errorResponse.error && errorResponse.error.message) {
-              this._snackBar.open(errorResponse.error.message);
+              this._snackBar.open( errorResponse.error.message );
             } else {
-              this._snackBar.open('Ошибка сохранения');
+              this._snackBar.open( 'Ошибка сохранения' );
             }
           }
-        });
+        } );
     }
   }
 }

@@ -1,12 +1,14 @@
-import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {ProductRoutingModule} from './product-routing.module';
-import {CatalogComponent} from './catalog/catalog.component';
-import {DetailComponent} from './detail/detail.component';
-import {SharedModule} from "../../shared/shared.module";
-import {CarouselModule} from "ngx-owl-carousel-o";
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
-@NgModule({
+import { CarouselModule } from "ngx-owl-carousel-o";
+
+import { ProductRoutingModule } from './product-routing.module';
+import { CatalogComponent } from './catalog/catalog.component';
+import { DetailComponent } from './detail/detail.component';
+import { SharedModule } from "../../shared/shared.module";
+
+@NgModule( {
   declarations: [
     CatalogComponent,
     DetailComponent
@@ -17,6 +19,6 @@ import {CarouselModule} from "ngx-owl-carousel-o";
     CarouselModule,
     ProductRoutingModule
   ]
-})
+} )
 export class ProductModule {
 }

@@ -1,23 +1,25 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ProductService} from "../../shared/services/product.service";
-import {ProductType} from "../../../types/product.type";
-import {OwlOptions} from "ngx-owl-carousel-o";
-import {config} from "../../shared/config/config";
-import {Subscription} from "rxjs";
-import {AuthService} from "../../core/auth/auth.service";
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from "rxjs";
 
-@Component({
+import { OwlOptions } from "ngx-owl-carousel-o";
+
+import { ProductService } from "../../shared/services/product.service";
+import { ProductType } from "../../../types/product.type";
+import { config } from "../../shared/config/config";
+import { AuthService } from "../../core/auth/auth.service";
+
+@Component( {
   selector: 'app-main',
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.scss']
-})
+} )
 export class MainComponent implements OnInit, OnDestroy {
   products: ProductType[] = [];
   isLogged: boolean = false;
   customOptions: OwlOptions = {
     loop: true,
     mouseDrag: false,
-    touchDrag: false,
+    touchDrag: true,
     pullDrag: false,
     dots: false,
     navSpeed: 700,
@@ -27,13 +29,13 @@ export class MainComponent implements OnInit, OnDestroy {
       0: {
         items: 1
       },
-      400: {
+      607: {
         items: 2
       },
-      740: {
+      923: {
         items: 3
       },
-      940: {
+      1240: {
         items: 4
       }
     },
@@ -42,7 +44,7 @@ export class MainComponent implements OnInit, OnDestroy {
   customOptionsReviews: OwlOptions = {
     loop: true,
     mouseDrag: false,
-    touchDrag: false,
+    touchDrag: true,
     pullDrag: false,
     dots: false,
     navSpeed: 700,
@@ -52,10 +54,11 @@ export class MainComponent implements OnInit, OnDestroy {
       0: {
         items: 1
       },
-      400: {
-        items: 2
+      818: {
+        items: 2,
+        margin: 0
       },
-      740: {
+      1240: {
         items: 3
       }
     },
@@ -109,16 +112,16 @@ export class MainComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.productServiceGetBestProductsSubscription = this.productService.getBestProducts()
-      .subscribe((data: ProductType[]) => {
+      .subscribe( (data: ProductType[]) => {
         if (data.length) {
           this.products = data;
         }
-      });
+      } );
 
     this.authServiceIsLogged$Subscription = this.authService.isLogged$
-      .subscribe((isLogged: boolean) => {
+      .subscribe( (isLogged: boolean) => {
         this.isLogged = isLogged;
-      });
+      } );
   }
 
   ngOnDestroy(): void {

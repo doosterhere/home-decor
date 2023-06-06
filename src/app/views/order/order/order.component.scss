@@ -21,30 +21,34 @@
       width: 422px;
 
       .order__details-info {
-        background: $color-secondary-04;
-        border-radius: 5px;
-        padding: 40px;
         margin-bottom: 14px;
+        padding: 40px;
+        border-radius: 5px;
+
+        background: $color-secondary-04;
 
         .order__details-info-title {
+          margin-bottom: 20px;
+
           font-family: 'Lora', sans-serif;
           font-style: normal;
           font-weight: 400;
           font-size: 26px;
           color: $color-primary;
-          margin-bottom: 20px;
         }
 
         .order__details-info-item {
+          margin-bottom: 10px;
           display: flex;
           align-items: center;
+
           color: $color-text-secondary;
-          margin-bottom: 10px;
 
           .order__detail-info-item-text {
+            margin-right: 12px;
+
             font-size: 16px;
             color: $color-text-secondary;
-            margin-right: 12px;
           }
 
           .order__detail-info-item-data {
@@ -59,7 +63,7 @@
             margin-bottom: 0;
 
             .order__detail-info-item-text,
-            order__detail-info-item-data {
+            .order__detail-info-item-data {
               font-weight: 600;
             }
           }
@@ -74,16 +78,20 @@
 }
 
 .order__popup {
-  padding: 100px 70px 219px;
   position: relative;
+
+  padding: 100px 70px 219px;
+
   text-align: center;
   color: $color-primary;
+
   background: url('../../../../assets/images/page/popup-bckgrnd.png') bottom center no-repeat;
 
   .order__popup-close {
     position: absolute;
     top: 32px;
     right: 31px;
+
     cursor: pointer;
 
     &:hover svg line {
@@ -92,12 +100,98 @@
   }
 
   .order__popup-title {
-    @include header-lora-32;
     margin-bottom: 40px;
+
+    @include header-lora-32;
   }
 
   .order__popup-content div {
-    font-size: 20px;
     margin-bottom: 5px;
+
+    font-size: 20px;
+  }
+}
+
+@media screen and (max-width: 1300px) {
+  .order {
+    .container {
+      .order__info {
+        flex-direction: column;
+        gap: 20px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .order {
+    padding-top: 50px;
+    padding-bottom: 90px;
+
+    .container {
+      .order__info {
+        .order__details {
+          width: unset;
+          max-width: 422px;
+
+          .order__details-info {
+            padding: 30px;
+          }
+        }
+      }
+    }
+  }
+
+  .order__popup {
+    padding: 60px 30px 200px;
+  }
+}
+
+@media screen and (max-width: 424px) {
+  .order {
+    .container {
+      .order__info {
+        .order__details {
+          .order__details-info {
+            padding: 20px;
+          }
+        }
+      }
+    }
+  }
+
+  .order__popup {
+    padding-bottom: 130px;
+
+    background-position-y: 370px;
+  }
+}
+
+@media screen and (max-width: 374px) {
+  .order {
+    .container {
+      .order__info {
+        .order__details {
+          .order__details-info {
+            padding: 15px;
+
+            .order__details-info-item {
+              align-items: end;
+
+              .order__detail-info-item-data {
+                white-space: nowrap;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .order__popup {
+    padding-left: 20px;
+    padding-right: 20px;
+
+    background-position-y: 400px;
   }
 }

@@ -5,20 +5,30 @@
     </a>
     <div class="header__content">
       <div class="header__top">
-        <div class="header__top-menu">
+        <div class="header__top-mobile-menu" (click)="changeMenuVisibility()">
+          <mat-icon
+            [ngStyle]="{'display': screenWidth > 1023 || (screenWidth <= 1023 && isMenuVisible) ? 'none' : 'flex'}">
+            menu
+          </mat-icon>
+        </div>
+        <div class="header__top-menu"
+             [ngStyle]="{'display' : screenWidth > 1023 || (screenWidth <= 1023 && isMenuVisible) ? 'block' : 'none'}">
           <nav>
+            <div class="header__top-menu-cross" (click)="changeMenuVisibility()">
+              <mat-icon>close</mat-icon>
+            </div>
             <ul>
               <li>
-                <a routerLink="/">Главная</a>
+                <a routerLink="/" (click)="changeMenuVisibility()">Главная</a>
               </li>
               <li>
-                <a routerLink="/catalog">Каталог</a>
+                <a routerLink="/catalog" (click)="changeMenuVisibility()">Каталог</a>
               </li>
               <li>
-                <a routerLink="/" fragment="reviews">Отзывы</a>
+                <a routerLink="/" fragment="reviews" (click)="changeMenuVisibility()">Отзывы</a>
               </li>
               <li>
-                <a routerLink="/" fragment="delivery">Доставка и оплата</a>
+                <a routerLink="/" fragment="delivery" (click)="changeMenuVisibility()">Доставка и оплата</a>
               </li>
             </ul>
           </nav>

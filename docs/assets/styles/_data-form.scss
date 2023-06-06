@@ -7,43 +7,22 @@
     margin-bottom: 30px;
 
     .data__form-label {
+      margin-bottom: 20px;
+
       font-family: 'Montserrat', sans-serif;
       font-style: normal;
       font-weight: 500;
       font-size: 16px;
       color: $color-text-secondary;
-      margin-bottom: 20px;
     }
 
     .data__form-label-additional {
       margin-bottom: 20px;
       max-width: 528px;
+
       font-size: 16px;
       line-height: 130%;
       color: $color-text-secondary;
-    }
-
-    .data__form-types {
-      border: 1px solid $color-primary-light;
-      border-radius: 3px;
-      display: flex;
-      align-items: center;
-      max-width: 340px;
-      box-sizing: border-box;
-      text-align: center;
-      font-size: 18px;
-      color: $color-text-secondary;
-
-      .data__form-type {
-        cursor: pointer;
-        padding: 13px 35px;
-        background-color: transparent;
-
-        &.active {
-          color: $color-white;
-          background-color: $color-primary-light;
-        }
-      }
     }
 
     .data__form-inputs {
@@ -87,10 +66,35 @@
       }
     }
 
+    .data__form-types {
+      display: flex;
+      align-items: center;
+      max-width: 340px;
+      border: 1px solid $color-primary-light;
+      border-radius: 3px;
+      box-sizing: border-box;
+
+      font-size: 18px;
+      text-align: center;
+      color: $color-text-secondary;
+
+      .data__form-type {
+        padding: 13px 35px;
+
+        background-color: transparent;
+        cursor: pointer;
+
+        &.active {
+          color: $color-white;
+
+          background-color: $color-primary-light;
+        }
+      }
+    }
+
     .data__form-radio {
       .data__form-radio-block {
         margin-bottom: 12px;
-
 
         &:last-child {
           margin-bottom: 0;
@@ -108,6 +112,51 @@
             font-family: 'Montserrat', sans-serif;
             font-style: normal;
             font-weight: 500;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .data__form {
+    max-width: 385px;
+
+    .data__form-block {
+      .data__form-label-additional {
+        max-width: 385px;
+      }
+
+      .data__form-inputs {
+        display: flex;
+        flex-direction: column;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 424px) {
+  .data__form {
+    max-width: 100%;
+
+    .data__form-block {
+      .data__form-label-additional {
+        max-width: 100%;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 374px) {
+  .data__form {
+    .data__form-block {
+      .data__form-types {
+        .data__form-type {
+          padding: 13px 22px;
+
+          &:last-child {
+            flex-grow: 1;
           }
         }
       }

@@ -1,22 +1,24 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {ProductType} from "../../../../types/product.type";
-import {environment} from "../../../../environments/environment";
-import {CartService} from "../../services/cart.service";
-import {CartType} from "../../../../types/cart.type";
-import {DefaultResponseType} from "../../../../types/default-response.type";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {AuthService} from "../../../core/auth/auth.service";
-import {FavoritesService} from "../../services/favorites.service";
-import {Router} from "@angular/router";
-import {FavoritesUtil} from "../../utils/favorites.util";
-import {SnackbarErrorUtil} from "../../utils/snackbar-error.util";
-import {Subscription} from "rxjs";
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Router } from "@angular/router";
+import { Subscription } from "rxjs";
 
-@Component({
+import { MatSnackBar } from "@angular/material/snack-bar";
+
+import { ProductType } from "../../../../types/product.type";
+import { environment } from "../../../../environments/environment";
+import { CartService } from "../../services/cart.service";
+import { CartType } from "../../../../types/cart.type";
+import { DefaultResponseType } from "../../../../types/default-response.type";
+import { AuthService } from "../../../core/auth/auth.service";
+import { FavoritesService } from "../../services/favorites.service";
+import { FavoritesUtil } from "../../utils/favorites.util";
+import { SnackbarErrorUtil } from "../../utils/snackbar-error.util";
+
+@Component( {
   selector: 'product-card',
   templateUrl: './product-card.component.html',
   styleUrls: ['./product-card.component.scss']
-})
+} )
 export class ProductCardComponent implements OnInit, OnDestroy {
   @Input() product!: ProductType;
   @Input() isLight: boolean = false;
@@ -53,7 +55,7 @@ export class ProductCardComponent implements OnInit, OnDestroy {
   }
 
   updateFavorites(): void {
-    const subscription = FavoritesUtil.updateFavorites(this.authService, this.favoriteService, this.product, this._snackBar);
+    const subscription = FavoritesUtil.updateFavorites( this.authService, this.favoriteService, this.product, this._snackBar );
     if (subscription) {
       this.favoritesUtilUpdateFavoritesSubscription = subscription as Subscription;
     }
@@ -61,24 +63,24 @@ export class ProductCardComponent implements OnInit, OnDestroy {
 
   navigate(): void {
     if (this.isLight) {
-      this.router.navigate(['/product/' + this.product.url]);
+      this.router.navigate( ['/product/' + this.product.url] );
     }
   }
 
   addToCart(): void {
-    this.cartServiceUpdateCartSubscription = this.cartService.updateCart(this.product.id, this.count)
-      .subscribe((data: CartType | DefaultResponseType) => {
-        SnackbarErrorUtil.showErrorMessageIfErrorAndThrowError(data as DefaultResponseType, this._snackBar);
+    this.cartServiceUpdateCartSubscription = this.cartService.updateCart( this.product.id, this.count )
+      .subscribe( (data: CartType | DefaultResponseType) => {
+        SnackbarErrorUtil.showErrorMessageIfErrorAndThrowError( data as DefaultResponseType, this._snackBar );
         this.countInCart = this.count;
-      });
+      } );
   }
 
   removeFromCart(): void {
-    this.cartServiceUpdateCartSubscription = this.cartService.updateCart(this.product.id, 0)
-      .subscribe((data: CartType | DefaultResponseType) => {
-        SnackbarErrorUtil.showErrorMessageIfErrorAndThrowError(data as DefaultResponseType, this._snackBar);
+    this.cartServiceUpdateCartSubscription = this.cartService.updateCart( this.product.id, 0 )
+      .subscribe( (data: CartType | DefaultResponseType) => {
+        SnackbarErrorUtil.showErrorMessageIfErrorAndThrowError( data as DefaultResponseType, this._snackBar );
         this.countInCart = 0;
         this.count = 1;
-      });
+      } );
   }
 }

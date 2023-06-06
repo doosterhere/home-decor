@@ -7,9 +7,10 @@
 
   .container {
     .favorites__title {
+      margin-bottom: 35px;
+
       @include header-lora-36;
       color: $color-primary;
-      margin-bottom: 35px;
     }
 
     .favorites__empty {
@@ -21,21 +22,36 @@
       }
 
       .button {
-        width: 255px;
         margin-top: 10px;
+        width: 255px;
       }
     }
 
     .favorites__products div {
-      padding-top: 15px;
       margin-top: 15px;
+      padding-top: 15px;
+
       border-top: 1px solid $color-secondary-04;
 
       &:first-child {
-        padding-top: 0;
         margin-top: 0;
+        padding-top: 0;
         border-top: 0;
       }
     }
+  }
+}
+
+@media screen and (min-width: 1300px) {
+  .favorites {
+    padding-top: 30px;
+    padding-bottom: 90px;
+  }
+}
+
+@media screen and (min-width: 767px) {
+  .favorites {
+    padding-top: 20px;
+    padding-bottom: 70px;
   }
 }

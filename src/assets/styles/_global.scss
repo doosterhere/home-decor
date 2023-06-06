@@ -241,3 +241,31 @@ input[type='text']:disabled {
 .mat-mdc-progress-spinner {
   --mdc-circular-progress-active-indicator-color: #6CAC72;
 }
+
+@media screen and (max-width: 1300px) {
+  .container {
+    margin: 0 30px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .container {
+    margin: 0 20px;
+
+    .carousel__header {
+      justify-content: center;
+
+      text-align: center;
+
+      .carousel__arrows {
+        display: none;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 424px) {
+  .container {
+    margin: 0 15px;
+  }
+}

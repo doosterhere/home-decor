@@ -7,18 +7,20 @@
 
   .container {
     .catalog__title {
-      @include header-lora-36;
-      color: $color-primary;
       margin-bottom: 33px;
       margin-left: 317px;
+
+      @include header-lora-36;
+      color: $color-primary;
     }
 
     .catalog__head {
+      margin-left: 317px;
       display: flex;
       justify-content: space-between;
-      align-items: baseline;
-      margin-left: 317px;
       gap: 20px;
+
+      align-items: baseline;
 
       .catalog__applied-filters {
         display: flex;
@@ -26,19 +28,22 @@
         flex-wrap: wrap;
 
         .catalog__applied-filter {
-          border: 1px solid $color-secondary-04;
-          border-radius: 50px;
-          font-size: 16px;
-          color: $color-text-secondary;
           padding: 8px 14px;
           display: flex;
           align-items: center;
+          border: 1px solid $color-secondary-04;
+          border-radius: 50px;
+
+          font-size: 16px;
+          color: $color-text-secondary;
 
           a {
-            text-decoration: none;
-            cursor: pointer;
-            display: flex;
             margin-left: 8px;
+            display: flex;
+
+            text-decoration: none;
+
+            cursor: pointer;
 
             &:hover svg g line {
               stroke: $color-button-hover;
@@ -48,21 +53,22 @@
       }
 
       .catalog__sorting {
-        box-sizing: border-box;
         position: relative;
-        font-size: 16px;
+
         width: 190px;
-        //width: 257px;
         min-width: 190px;
-        //min-width: 257px;
+        box-sizing: border-box;
+
+        font-size: 16px;
+
         cursor: pointer;
 
         .catalog__sorting-head {
+          padding: 12px 0 12px 23px;
           display: flex;
           align-items: center;
           justify-content: space-between;
-          //padding: 12px 23px 12px 23px;
-          padding: 12px 0 12px 23px;
+
           color: $color-text-secondary;
 
           span {
@@ -72,14 +78,17 @@
 
         .catalog__sorting-body {
           position: absolute;
-          width: 100%;
-          box-sizing: border-box;
           z-index: 3;
-          display: none;
+
           padding: 12px 23px;
-          background-color: #F5F5F5;
+          width: 100%;
+          display: none;
+          box-sizing: border-box;
           border-radius: 0 0 5px 5px;
+
           color: #8E8E8E;
+
+          background-color: #F5F5F5;
 
           .catalog__sorting-item {
             margin-bottom: 14px;
@@ -103,10 +112,12 @@
           min-width: 257px;
 
           .catalog__sorting-head {
-            color: $color-black;
-            border-radius: 5px 5px 0 0;
-            background: #EBEBEB;
             padding-right: 23px;
+            border-radius: 5px 5px 0 0;
+
+            color: $color-black;
+
+            background: #EBEBEB;
 
             svg {
               rotate: 180deg;
@@ -125,9 +136,9 @@
       display: flex;
 
       .catalog__filters {
+        margin-right: 58px;
         width: 257px;
         min-width: 257px;
-        margin-right: 58px;
       }
 
       .catalog__items {
@@ -138,16 +149,17 @@
     }
 
     .pagination {
+      margin-top: 79px;
       display: flex;
       justify-content: center;
       align-items: center;
-      margin-top: 79px;
 
       .pagination-arrow {
-        cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
+
+        cursor: pointer;
 
         &.disabled {
           opacity: 0.3;
@@ -162,16 +174,18 @@
         gap: 15px;
 
         .pagination__page {
+          width: 60px;
+          height: 60px;
           display: flex;
           align-items: center;
           justify-content: center;
-          width: 60px;
-          height: 60px;
-          cursor: pointer;
-          text-decoration: none;
+          border-radius: 50%;
+
           font-size: 20px;
           color: $color-text-secondary;
-          border-radius: 50%;
+          text-decoration: none;
+
+          cursor: pointer;
           user-select: none;
 
           &:hover {
@@ -180,6 +194,122 @@
 
           &.active {
             background-color: $color-secondary-03;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1300px) {
+  .catalog {
+    padding-top: 90px;
+    padding-bottom: 100px;
+
+    .container {
+      .catalog__head {
+        margin-left: 0;
+      }
+
+      .catalog__layout {
+        .catalog__filters {
+          margin-right: 48px;
+        }
+
+        .catalog__items {
+          width: 100%;
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1023px) {
+  .catalog {
+    padding-top: 80px;
+    padding-bottom: 80px;
+
+    .container {
+      .catalog__title {
+        margin-left: 0;
+
+        text-align: center;
+      }
+
+      .catalog__head {
+        flex-direction: column;
+
+        .catalog__sorting {
+          margin-left: auto;
+        }
+      }
+
+      .catalog__layout {
+        .catalog__filters {
+          margin-right: 0;
+        }
+
+        .catalog__items {
+          grid-template-columns: repeat(1, 1fr);
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .catalog {
+    padding-top: 70px;
+    padding-bottom: 70px;
+
+    .container {
+      .catalog__layout {
+        flex-direction: column;
+
+        .catalog__filters {
+          margin-bottom: 30px;
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+
+          category-filter {
+            width: 291px;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 424px) {
+  .catalog {
+    padding-top: 60px;
+    padding-bottom: 60px;
+
+    .container {
+      .pagination {
+        margin-top: 69px;
+
+        .pagination__pages {
+          margin: 0 15px;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 374px) {
+  .catalog {
+    .container {
+      .pagination {
+        .pagination__pages {
+          gap: 10px;
+
+          .pagination__page {
+            width: 50px;
+            height: 50px;
           }
         }
       }

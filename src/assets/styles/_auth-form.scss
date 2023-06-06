@@ -6,11 +6,12 @@
   width: 422px;
 
   .auth-form__title {
+    margin-bottom: 35px;
+
     font-family: 'Lora', sans-serif;
     font-weight: 400;
     font-size: 36px;
     color: $color-primary;
-    margin-bottom: 35px;
   }
 
   .auth-form__inputs {
@@ -38,14 +39,16 @@
 
       input {
         margin: 0;
+
         cursor: pointer;
       }
 
       label {
+        margin-left: 10px;
+
         font-size: 16px;
         line-height: 130%;
         color: $color-text-secondary;
-        margin-left: 10px;
 
         a {
           color: $color-primary-light;
@@ -65,13 +68,63 @@
 
   .auth-form__link {
     margin-top: 8px;
+
     font-size: 16px;
     color: $color-text-secondary;
 
     a {
       margin-left: 5px;
-      text-decoration: none;
+
       color: $color_primary-light;
+      text-decoration: none;
+    }
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .auth-form {
+    margin-top: 30px;
+    margin-bottom: 80px;
+    width: 385px;
+
+    .auth-form__title {
+      text-align: center;
+    }
+
+    .auth-form__button {
+      margin-top: 30px;
+
+      button.button {
+        width: 100%;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 424px) {
+  .auth-form {
+    margin-top: 20px;
+    margin-bottom: 70px;
+    width: 100%;
+
+    .auth-form__inputs {
+      .auth-form__checkbox {
+        label {
+          font-size: 14px;
+        }
+      }
+    }
+
+    .auth-form__link {
+      font-size: 14px;
+    }
+  }
+}
+
+@media screen and (max-width: 374px) {
+  .auth-form {
+    .auth-form__title {
+      font-size: 32px;
     }
   }
 }

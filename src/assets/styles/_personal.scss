@@ -2,28 +2,60 @@
 @import "variables";
 
 .personal__title {
-  @include header-lora-32;
   margin-bottom: 30px;
+
+  @include header-lora-32;
 }
 
 .personal-pages-selector {
   margin-bottom: 50px;
+  display: flex;
+  align-items: center;
+
   font-family: 'Lora', sans-serif;
   font-style: normal;
   font-weight: 400;
   font-size: 26px;
   color: $color-primary;
-  display: flex;
-  align-items: center;
 
   .personal_page {
-    border-bottom: 2px solid $color-secondary-03;
     padding: 0 15px 13px;
+    border-bottom: 2px solid $color-secondary-03;
+
     cursor: pointer;
 
     &.active {
-      border-bottom: 3px solid $color-primary-light;
       padding-bottom: 12px;
+      border-bottom: 3px solid $color-primary-light;
+    }
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .personal-pages-selector {
+    display: grid;
+    grid-template-columns: auto auto;
+
+    font-size: 22px;
+  }
+}
+
+@media screen and (max-width: 424px) {
+  .personal-pages-selector {
+    grid-template-columns: 1fr 1fr;
+
+    .personal_page {
+      padding: 0 35px 13px;
+
+      text-align: center;
+    }
+  }
+}
+
+@media screen and (max-width: 374px) {
+  .personal-pages-selector {
+    .personal_page {
+      padding: 0 25px 13px;
     }
   }
 }

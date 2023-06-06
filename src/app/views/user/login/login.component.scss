@@ -13,3 +13,37 @@
     }
   }
 }
+
+@media screen and (max-width: 1300px) {
+  .login {
+    .container {
+      overflow: hidden;
+    }
+  }
+}
+
+@media screen and (max-width: 1023px) {
+  .login {
+    .container {
+      overflow: hidden;
+
+      .page-image {
+        margin-left: 0;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .login {
+    justify-content: center;
+
+    .container {
+      overflow: unset;
+
+      .page-image {
+        display: none;
+      }
+    }
+  }
+}

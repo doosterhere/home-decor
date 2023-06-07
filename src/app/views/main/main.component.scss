@@ -308,7 +308,11 @@
 
   .reviews {
     margin: 80px 0;
+  }
+}
 
+@media screen and (max-width: 877px) {
+  .reviews {
     .container {
       .reviews__carousel {
         .reviews__arrows {
